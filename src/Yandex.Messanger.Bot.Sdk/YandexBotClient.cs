@@ -1,8 +1,8 @@
-using System.Net.Http.Headers;
-using Yandex.Messanger.Bot.Sdk.Abstractions;
-using Yandex.Messanger.Bot.Sdk.Impl;
-
 namespace Yandex.Messanger.Bot.Sdk;
+
+using System.Net.Http.Headers;
+using Abstractions;
+using Impl;
 
 public class YandexBotClient : IYandexBotClient
 {
@@ -24,6 +24,8 @@ public class YandexBotClient : IYandexBotClient
     }
 
     public IChats Chats { get; } = new Chats(_httpClient);
+
     public IPolls Polls { get; } = new Polls(_httpClient);
+
     public IUpdates Updates { get; } = new Updates(_httpClient);
 }

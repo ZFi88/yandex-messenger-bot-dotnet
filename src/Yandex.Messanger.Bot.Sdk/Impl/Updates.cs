@@ -1,14 +1,15 @@
-﻿using Yandex.Messanger.Bot.Sdk.Abstractions;
-using Yandex.Messanger.Bot.Sdk.Models.Requests;
-using Yandex.Messanger.Bot.Sdk.Models.Responses;
+﻿namespace Yandex.Messanger.Bot.Sdk.Impl;
 
-namespace Yandex.Messanger.Bot.Sdk.Impl;
+using Abstractions;
+using Models.Requests;
+using Models.Responses;
 
 internal class Updates : BaseClient, IUpdates
 {
     private readonly Dictionary<string, IObserver> _observers = new Dictionary<string, IObserver>();
 
-    public Updates(HttpClient client) : base(client)
+    public Updates(HttpClient client)
+        : base(client)
     {
     }
 

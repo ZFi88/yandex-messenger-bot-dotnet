@@ -1,8 +1,8 @@
-﻿using Yandex.Messanger.Bot.Sdk.Abstractions;
-using Yandex.Messanger.Bot.Sdk.Impl;
-using Yandex.Messanger.Bot.Sdk.Models;
+﻿namespace Yandex.Messanger.Bot.Sdk.Extensions;
 
-namespace Yandex.Messanger.Bot.Sdk.Extensions;
+using Abstractions;
+using Impl;
+using Models;
 
 public static class UpdatesExtensions
 {

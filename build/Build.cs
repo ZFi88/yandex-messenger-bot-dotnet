@@ -1,27 +1,7 @@
-using Nuke.Common;
+using Bimlab.Nuke;
+using Bimlab.Nuke.Components;
 
-class Build : NukeBuild
+class Build : BimLabBuild, IPublish, ITest
 {
-    public static int Main() => Execute<Build>(x => x.Compile);
-
-    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")] 
-    readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
-
-    Target Clean => _ => _
-        .Before(Restore)
-        .Executes(() =>
-        {
-        });
-
-    Target Restore => _ => _
-        .DependsOn(Clean)
-        .Executes(() =>
-        {
-        });
-
-    Target Compile => _ => _
-        .DependsOn(Restore)
-        .Executes(() =>
-        {
-        });
+    public static int Main() => Execute<Build>(x => x.From<ICompile>().Compile);
 }

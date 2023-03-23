@@ -1,7 +1,7 @@
-﻿using Yandex.Messanger.Bot.Sdk.Abstractions;
-using Yandex.Messanger.Bot.Sdk.Models;
+﻿namespace Yandex.Messanger.Bot.Sdk.Impl;
 
-namespace Yandex.Messanger.Bot.Sdk.Impl;
+using Abstractions;
+using Models;
 
 internal class Observer : IObserver
 {

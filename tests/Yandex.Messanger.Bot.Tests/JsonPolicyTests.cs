@@ -1,21 +1,11 @@
-using System.Text.Json;
-using Yandex.Messanger.Bot.Sdk.Json;
-
 namespace Yandex.Messanger.Bot.Tests;
+
+using System.Text.Json;
+using Sdk.Json;
 
 public class JsonPolicyTests
 {
-    [Fact]
-    public void ShouldSerialize()
-    {
-        var testClass = new TestClass(100);
-        var json = JsonSerializer.Serialize(testClass, new JsonSerializerOptions()
-        {
-            PropertyNamingPolicy = new SerializePolicy()
-        });
-
-        Assert.Equal("{\"message_id\":100}", json);
-    }
+    private record TestClass(int MessageId);
 
     [Fact]
     public void ShouldDeserialize()
@@ -28,5 +18,15 @@ public class JsonPolicyTests
         Assert.Equal(100, testClass!.MessageId);
     }
 
-    record TestClass(int MessageId);
+    [Fact]
+    public void ShouldSerialize()
+    {
+        var testClass = new TestClass(100);
+        var json = JsonSerializer.Serialize(testClass, new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = new SerializePolicy()
+        });
+
+        Assert.Equal("{\"message_id\":100}", json);
+    }
 }

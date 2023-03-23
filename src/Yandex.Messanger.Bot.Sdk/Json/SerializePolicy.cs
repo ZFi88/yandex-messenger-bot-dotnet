@@ -1,7 +1,7 @@
-﻿using System.Text.Json;
-using System.Text.RegularExpressions;
+﻿namespace Yandex.Messanger.Bot.Sdk.Json;
 
-namespace Yandex.Messanger.Bot.Sdk.Json;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 public partial class SerializePolicy : JsonNamingPolicy
 {

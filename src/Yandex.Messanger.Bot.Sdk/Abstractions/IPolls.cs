@@ -1,7 +1,7 @@
-using Yandex.Messanger.Bot.Sdk.Models.Requests;
-using Yandex.Messanger.Bot.Sdk.Models.Responses;
-
 namespace Yandex.Messanger.Bot.Sdk.Abstractions;
+
+using Models.Requests;
+using Models.Responses;
 
 public interface IPolls
 {

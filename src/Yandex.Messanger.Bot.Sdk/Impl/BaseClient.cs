@@ -1,11 +1,11 @@
-﻿using System.Net;
+﻿namespace Yandex.Messanger.Bot.Sdk.Impl;
+
+using System.Net;
 using System.Text;
 using System.Text.Json;
-using Yandex.Messanger.Bot.Sdk.Exceptions;
-using Yandex.Messanger.Bot.Sdk.Json;
-using Yandex.Messanger.Bot.Sdk.Models.Responses;
-
-namespace Yandex.Messanger.Bot.Sdk.Impl;
+using Exceptions;
+using Json;
+using Models.Responses;
 
 internal abstract class BaseClient
 {

@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BimLab.Nuke" Version="2023.1.0-dev04" />
     <PackageReference Include="Nuke.Common" Version="6.3.0" />
   </ItemGroup>
 

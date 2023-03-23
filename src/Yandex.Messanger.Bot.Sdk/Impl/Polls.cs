@@ -1,12 +1,13 @@
-﻿using Yandex.Messanger.Bot.Sdk.Abstractions;
-using Yandex.Messanger.Bot.Sdk.Models.Requests;
-using Yandex.Messanger.Bot.Sdk.Models.Responses;
+﻿namespace Yandex.Messanger.Bot.Sdk.Impl;
 
-namespace Yandex.Messanger.Bot.Sdk.Impl;
+using Abstractions;
+using Models.Requests;
+using Models.Responses;
 
 internal class Polls : BaseClient, IPolls
 {
-    public Polls(HttpClient client) : base(client)
+    public Polls(HttpClient client)
+        : base(client)
     {
     }
 
