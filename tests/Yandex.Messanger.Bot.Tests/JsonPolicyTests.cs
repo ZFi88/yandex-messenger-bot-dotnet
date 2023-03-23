@@ -1,6 +1,7 @@
 namespace Yandex.Messanger.Bot.Tests;
 
 using System.Text.Json;
+using FluentAssertions;
 using Sdk.Json;
 
 public class JsonPolicyTests
@@ -15,7 +16,7 @@ public class JsonPolicyTests
             PropertyNamingPolicy = new SerializePolicy()
         });
 
-        Assert.Equal(100, testClass!.MessageId);
+        testClass!.MessageId.Should().Be(100);
     }
 
     [Fact]
@@ -27,6 +28,6 @@ public class JsonPolicyTests
             PropertyNamingPolicy = new SerializePolicy()
         });
 
-        Assert.Equal("{\"message_id\":100}", json);
+        json.Should().BeEquivalentTo("{\"message_id\":100}");
     }
 }
