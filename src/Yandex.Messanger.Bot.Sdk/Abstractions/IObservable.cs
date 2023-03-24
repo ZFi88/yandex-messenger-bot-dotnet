@@ -2,5 +2,7 @@
 
 public interface IObservable
 {
+    public IDictionary<string, IObserver> Observers { get; }
+
     void Subscribe(IObserver observer);
 }

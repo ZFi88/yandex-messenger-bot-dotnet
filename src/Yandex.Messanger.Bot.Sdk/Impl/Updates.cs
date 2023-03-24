@@ -13,6 +13,8 @@ internal class Updates : BaseClient, IUpdates
     {
     }
 
+    public IDictionary<string, IObserver> Observers => _observers;
+
     public async Task<Response> GetUpdates(GetUpdateRequest request, CancellationToken cancellationToken = default)
     {
         var response = await Send<GetUpdateResponse>("messages/sendFile", HttpMethod.Post, request, cancellationToken)
