@@ -4,15 +4,29 @@ using Abstractions;
 using Impl;
 using Models;
 
+/// <summary>
+/// The extensions for <see cref="IUpdates"/> objects.
+/// </summary>
 public static class UpdatesExtensions
 {
-    public static void Subscribe(this IUpdates updates, Func<Update, CancellationToken, Task> func)
+    /// <summary>
+    /// Subscribes on all messages.
+    /// </summary>
+    /// <param name="updates">An <see cref="IUpdates"/> object.</param>
+    /// <param name="messageHandler">A message handler.</param>
+    public static void Subscribe(this IUpdates updates, Func<Update, CancellationToken, Task> messageHandler)
     {
-        updates.Subscribe(new Observer(null!, func));
+        updates.Subscribe(new Observer(null!, messageHandler));
     }
 
-    public static void Subscribe(this IUpdates updates, string msg, Func<Update, CancellationToken, Task> func)
+    /// <summary>
+    /// Subscribes on messages with <see cref="msg"/> text..
+    /// </summary>
+    /// <param name="updates">An <see cref="IUpdates"/> object.</param>
+    /// <param name="msg">A message text.</param>
+    /// <param name="messageHandler">The message handler.</param>
+    public static void Subscribe(this IUpdates updates, string msg, Func<Update, CancellationToken, Task> messageHandler)
     {
-        updates.Subscribe(new Observer(msg, func));
+        updates.Subscribe(new Observer(msg, messageHandler));
     }
 }

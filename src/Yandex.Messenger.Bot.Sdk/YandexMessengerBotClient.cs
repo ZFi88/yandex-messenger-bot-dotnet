@@ -4,11 +4,20 @@ using System.Net.Http.Headers;
 using Abstractions;
 using Impl;
 
+/// <inheritdoc />
 public class YandexMessengerBotClient : IYandexMessengerBotClient
 {
+    /// <summary>
+    /// Base Yandex Messenger Bot API address.
+    /// </summary>
     public const string YandexMessengerBotApiBaseAddress = "https://botapi.messenger.yandex.net/bot/v1/";
+
     private static HttpClient _httpClient = null!;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="YandexMessengerBotClient"/> class.
+    /// </summary>
+    /// <param name="token">An access token.</param>
     public YandexMessengerBotClient(string token)
     {
         _httpClient = new HttpClient()
@@ -19,17 +28,30 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
         Init();
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="YandexMessengerBotClient"/> class.
+    /// </summary>
+    /// <param name="httpClient">A http client.</param>
     public YandexMessengerBotClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
         Init();
     }
 
+    /// <inheritdoc />
     public IChats Chats { get; private set; }
 
+    /// <inheritdoc />
     public IPolls Polls { get; private set; }
 
+    /// <inheritdoc />
     public IUpdates Updates { get; private set; }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _httpClient.Dispose();
+    }
 
     private void Init()
     {

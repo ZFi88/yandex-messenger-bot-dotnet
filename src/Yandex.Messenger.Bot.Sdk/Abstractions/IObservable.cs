@@ -1,8 +1,13 @@
 ﻿namespace Yandex.Messenger.Bot.Sdk.Abstractions;
 
+/// <summary>
+/// An abstraction which represents an observable object.
+/// </summary>
 public interface IObservable
 {
-    public IDictionary<string, IObserver> Observers { get; }
-
+    /// <summary>
+    /// Subscribes a observer to a observable.
+    /// </summary>
+    /// <param name="observer">The observer.</param>
     void Subscribe(IObserver observer);
 }

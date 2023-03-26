@@ -5,18 +5,25 @@ using Models.Requests;
 using Models.Responses;
 using Strategies;
 
+/// <inheritdoc cref="IUpdates"/> />
 internal class Updates : BaseClient, IUpdates
 {
     private readonly Dictionary<string, IObserver> _observers = new();
     private long _offset = 0L;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Updates"/> class.
+    /// </summary>
+    /// <param name="client">A http client.</param>
     public Updates(HttpClient client)
         : base(client)
     {
     }
 
+    /// <inheritdoc/>
     public IDictionary<string, IObserver> Observers => _observers;
 
+    /// <inheritdoc/>
     public async Task<Response> GetUpdates(GetUpdateRequest request, CancellationToken cancellationToken = default)
     {
         var payload = new GetUpdateRequestInternal()
@@ -47,12 +54,14 @@ internal class Updates : BaseClient, IUpdates
         return response;
     }
 
+    /// <inheritdoc/>
     public async Task<SetWebhookResponse> SetWebhook(SetWebhookRequest request, CancellationToken cancellationToken = default)
     {
         return await Send<SetWebhookResponse>(new SendJsonStrategy("self/update"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public void Subscribe(IObserver observer)
     {
         _observers.Add(observer.Message ?? string.Empty, observer);

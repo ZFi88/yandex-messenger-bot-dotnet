@@ -10,11 +10,19 @@ using Sdk.Exceptions;
 using Sdk.Json;
 using Sdk.Models.Responses;
 
-public class WebhookMiddleware
+/// <summary>
+/// The middleware for handling webhooks from Yandex Messenger Bot API.
+/// </summary>
+internal class WebhookMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly YandexMessengerBotOptions _yandexMessengerBotOptions;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WebhookMiddleware"/> class.
+    /// </summary>
+    /// <param name="next">A request delegate.</param>
+    /// <param name="options">The Yandex Messenger Bot options.</param>
     public WebhookMiddleware(RequestDelegate next, IOptions<YandexMessengerBotOptions> options)
     {
         _next = next;
@@ -26,6 +34,13 @@ public class WebhookMiddleware
         _yandexMessengerBotOptions = options.Value!;
     }
 
+    /// <summary>
+    /// Handles ASPNET Core request pipeline step.
+    /// </summary>
+    /// <param name="context">The <see cref="HttpContent"/>.</param>
+    /// <param name="observers">A collection of message observers.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     public async Task InvokeAsync(
         HttpContext context,
         IEnumerable<IObserver> observers,
@@ -36,8 +51,9 @@ public class WebhookMiddleware
         if (webhookUrl.PathAndQuery == context.Request.Path.Value)
         {
             var response = await JsonSerializer.DeserializeAsync<GetUpdateResponse>(context.Request.Body,
-                YandexMessengerBotJsonOptions.Value);
-            foreach (var update in response.Updates)
+                YandexMessengerBotJsonOptions.Value,
+                cancellationToken);
+            foreach (var update in response!.Updates)
             {
                 var globalObservers = observersLookup[string.Empty];
                 foreach (var observer in globalObservers)

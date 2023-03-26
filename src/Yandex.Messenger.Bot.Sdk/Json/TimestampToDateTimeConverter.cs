@@ -6,24 +6,24 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+/// <summary>
+/// Converts a UNIX timestamp value to the <see cref="DateTime"/> value.
+/// </summary>
 public class TimestampToDateTimeConverter : JsonConverter<DateTime>
 {
+    /// <inheritdoc />
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Unix timestamp is seconds past epoch
         var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(reader.GetInt64()).ToLocalTime();
+        dateTime = dateTime.AddSeconds(reader.GetInt64()).ToUniversalTime();
         return dateTime;
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
-        // The "R" standard format will always be 29 bytes.
-        Span<byte> utf8Date = new byte[29];
-
-        bool result = Utf8Formatter.TryFormat(value, utf8Date, out _, new StandardFormat('R'));
-        Debug.Assert(result);
-
-        writer.WriteStringValue(utf8Date);
+        var unixTime = ((DateTimeOffset)value).ToUnixTimeSeconds();
+        writer.WriteNumberValue(unixTime);
     }
 }

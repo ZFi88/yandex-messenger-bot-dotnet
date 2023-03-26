@@ -8,17 +8,31 @@ using Json;
 using Models.Responses;
 using Strategies;
 
+/// <summary>
+/// The base client. Provides common functionality for sending requests and handling errors.
+/// </summary>
 internal abstract class BaseClient
 {
     private readonly HttpClient _client;
     private readonly JsonSerializerOptions? _options;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseClient"/> class.
+    /// </summary>
+    /// <param name="client">A http client.</param>
     protected BaseClient(HttpClient client)
     {
         _client = client;
         _options = YandexMessengerBotJsonOptions.Value;
     }
 
+    /// <summary>
+    /// Sends a request to Yandex Messenger Bot API endpoints.
+    /// </summary>
+    /// <typeparam name="TResp">The type of response data.</typeparam>
+    /// <param name="strategy">The http request creation strategy.</param>
+    /// <param name="payload">The http request payload.</param>
+    /// <param name="stoppingToken">A cancellation token.</param>
     protected async Task<TResp> Send<TResp>(ISendStrategy strategy, object payload, CancellationToken stoppingToken)
         where TResp : Response
     {
@@ -27,7 +41,7 @@ internal abstract class BaseClient
         var stream = await response.Content.ReadAsStreamAsync();
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            throw new BotException();
+            throw new BotException(await response.Content.ReadAsStringAsync());
         }
 
         var data = await JsonSerializer.DeserializeAsync<TResp>(stream, _options, stoppingToken).AsTask();

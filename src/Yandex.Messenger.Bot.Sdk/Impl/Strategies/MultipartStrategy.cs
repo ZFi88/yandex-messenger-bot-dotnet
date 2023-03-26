@@ -3,13 +3,24 @@ namespace Yandex.Messenger.Bot.Sdk.Impl.Strategies;
 using Exceptions;
 using Models.Requests;
 
+/// <summary>
+/// Generates multipart http request message.
+/// </summary>
+/// <typeparam name="TRequest">The type of request options and payload.</typeparam>
 internal abstract class MultipartStrategy<TRequest> : BaseStrategy<TRequest>
     where TRequest : FileRequest
 {
+    /// <summary>
+    /// Relative endpoint url.
+    /// </summary>
     protected abstract string Endpoint { get; }
 
+    /// <summary>
+    /// The name of a file part of the request.
+    /// </summary>
     protected abstract string FilePartName { get; }
-    
+
+    /// <inheritdoc/>
     protected override HttpRequestMessage CreateRequestInner(TRequest sendFileRequest)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, Endpoint);

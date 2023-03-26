@@ -2,12 +2,16 @@
 
 using Models.Requests;
 
+/// <inheritdoc />
 internal class SendAlbumStrategy : MultipartStrategy<SendAlbumRequest>
 {
+    /// <inheritdoc/>
     protected override string Endpoint => "messages/sendGallery";
 
+    /// <inheritdoc/>
     protected override string FilePartName => "images";
 
+    /// <inheritdoc/>
     protected override HttpRequestMessage CreateRequestInner(SendAlbumRequest sendFileRequest)
     {
         var request = base.CreateRequestInner(sendFileRequest);
