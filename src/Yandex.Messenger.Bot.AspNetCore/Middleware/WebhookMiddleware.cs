@@ -8,50 +8,51 @@ using Options;
 using Sdk.Abstractions;
 using Sdk.Exceptions;
 using Sdk.Json;
-using Sdk.Models;
+using Sdk.Models.Responses;
 
 public class WebhookMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly IOptions<WebhookOptions> _options;
-    private WebhookOptions _webhookOptions;
+    private readonly YandexMessengerBotOptions _yandexMessengerBotOptions;
 
-    public WebhookMiddleware(RequestDelegate next, IOptions<WebhookOptions> options)
+    public WebhookMiddleware(RequestDelegate next, IOptions<YandexMessengerBotOptions> options)
     {
         _next = next;
-        _options = options;
-        if (_options.Value != null && _options.Value.WebhookUrl != null)
+        if (options.Value != null && options.Value.WebhookUrl == null)
         {
             throw new BotException();
         }
 
-        _webhookOptions = _options.Value!;
+        _yandexMessengerBotOptions = options.Value!;
     }
 
-    public async Task InvokeAsync(HttpContext context, IYandexBotClient client)
+    public async Task InvokeAsync(HttpContext context, IEnumerable<IObserver> observers)
     {
-        var webhookUrl = _webhookOptions.WebhookUrl!;
+        var observersLookup = observers.ToLookup(x => x.Message);
+        var webhookUrl = _yandexMessengerBotOptions.WebhookUrl!;
         if (webhookUrl.PathAndQuery == context.Request.Path.Value)
         {
-            var observers = client.Updates.Observers;
-            var updates = JsonSerializer.Deserialize<Update[]>(context.Request.Body, new JsonSerializerOptions()
+            var response = await JsonSerializer.DeserializeAsync<GetUpdateResponse>(context.Request.Body,
+                YandexMessengerBotJsonOptions.Value);
+            foreach (var update in response.Updates)
             {
-                PropertyNamingPolicy = new SerializePolicy()
-            });
-            foreach (var update in updates)
-            {
-                if (observers.TryGetValue(string.Empty, out var observer))
+                var globalObservers = observersLookup[string.Empty];
+                foreach (var observer in globalObservers)
                 {
                     await observer.OnNewUpdate(update);
                 }
 
-                if (observers.TryGetValue(update.Text, out observer))
+                var mesObservers = observersLookup[update.Text];
+                foreach (var observer in mesObservers)
                 {
                     await observer.OnNewUpdate(update);
                 }
             }
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
+            context.Response.ContentType = "application/json";
+
+            return;
         }
 
         await _next(context);

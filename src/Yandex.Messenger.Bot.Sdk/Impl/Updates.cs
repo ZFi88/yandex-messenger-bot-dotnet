@@ -6,7 +6,7 @@ using Models.Responses;
 
 internal class Updates : BaseClient, IUpdates
 {
-    private readonly Dictionary<string, IObserver> _observers = new Dictionary<string, IObserver>();
+    private readonly IDictionary<string, IObserver> _observers = new Dictionary<string, IObserver>();
 
     public Updates(HttpClient client)
         : base(client)
@@ -19,6 +19,7 @@ internal class Updates : BaseClient, IUpdates
     {
         var response = await Send<GetUpdateResponse>("messages/getUpdates", HttpMethod.Post, request, cancellationToken)
             .ConfigureAwait(false);
+
         foreach (var update in response.Updates)
         {
             if (_observers.TryGetValue(string.Empty, out var observer))

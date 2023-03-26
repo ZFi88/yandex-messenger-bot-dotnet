@@ -2,5 +2,5 @@
 
 public record SetWebhookRequest
 {
-    public string? WebhookUrl { get; init; }
+    public required string? WebhookUrl { get; init; }
 }

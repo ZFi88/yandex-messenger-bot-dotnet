@@ -15,11 +15,7 @@ internal abstract class BaseClient
     protected BaseClient(HttpClient client)
     {
         _client = client;
-        _options = new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true, PropertyNamingPolicy = new SerializePolicy()
-        };
-        _options.Converters.Add(new TimestampToDateTimeConverter());
+        _options = YandexMessengerBotJsonOptions.Value;
     }
 
     protected async Task<TResp> Send<TResp>(string endpoint, HttpMethod method, object payload, CancellationToken stoppingToken)
@@ -32,6 +28,7 @@ internal abstract class BaseClient
         };
         var response = await _client.SendAsync(request, stoppingToken);
         var stream = await response.Content.ReadAsStreamAsync(stoppingToken);
+        var st = await response.Content.ReadAsStringAsync(stoppingToken);
         if (response.StatusCode != HttpStatusCode.OK)
         {
             throw new BotException();
