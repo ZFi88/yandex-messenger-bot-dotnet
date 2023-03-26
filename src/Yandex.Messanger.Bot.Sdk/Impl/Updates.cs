@@ -17,7 +17,7 @@ internal class Updates : BaseClient, IUpdates
 
     public async Task<Response> GetUpdates(GetUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await Send<GetUpdateResponse>("messages/sendFile", HttpMethod.Post, request, cancellationToken)
+        var response = await Send<GetUpdateResponse>("messages/getUpdates", HttpMethod.Post, request, cancellationToken)
             .ConfigureAwait(false);
         foreach (var update in response.Updates)
         {

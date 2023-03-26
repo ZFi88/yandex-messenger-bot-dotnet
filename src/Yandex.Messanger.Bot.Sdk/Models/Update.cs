@@ -1,3 +1,3 @@
 ﻿namespace Yandex.Messanger.Bot.Sdk.Models;
 
-public record Update(User From, Chat Chat, string Text, TimeSpan Timestamp, int MessageId, int UpdateId, File File);
+public record Update(User From, Chat Chat, string Text, DateTime Timestamp, long MessageId, long UpdateId, File File);

@@ -16,6 +16,10 @@ public class YandexBotClient : IYandexBotClient
             BaseAddress = new Uri(YandexMessangerBotApiBaseAddress),
         };
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", token);
+
+        Chats = new Chats(_httpClient);
+        Polls = new Polls(_httpClient);
+        Updates = new Updates(_httpClient);
     }
 
     public YandexBotClient(HttpClient httpClient)
@@ -23,9 +27,9 @@ public class YandexBotClient : IYandexBotClient
         _httpClient = httpClient;
     }
 
-    public IChats Chats { get; } = new Chats(_httpClient);
+    public IChats Chats { get; }
 
-    public IPolls Polls { get; } = new Polls(_httpClient);
+    public IPolls Polls { get; }
 
-    public IUpdates Updates { get; } = new Updates(_httpClient);
+    public IUpdates Updates { get; }
 }
