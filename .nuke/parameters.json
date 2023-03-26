@@ -1,4 +1,4 @@
 {
   "$schema": "./build.schema.json",
-  "Solution": "yandex-messanger-bot-dotnet.sln"
+  "Solution": "yandex-messenger-bot-dotnet.sln"
 }

@@ -1,8 +1,8 @@
-﻿using Yandex.Messanger.Bot.Sdk;
-using Yandex.Messanger.Bot.Sdk.Abstractions;
-using Yandex.Messanger.Bot.Sdk.Extensions;
-using Yandex.Messanger.Bot.Sdk.Models;
-using Yandex.Messanger.Bot.Sdk.Models.Requests;
+﻿using Yandex.Messenger.Bot.Sdk;
+using Yandex.Messenger.Bot.Sdk.Abstractions;
+using Yandex.Messenger.Bot.Sdk.Extensions;
+using Yandex.Messenger.Bot.Sdk.Models;
+using Yandex.Messenger.Bot.Sdk.Models.Requests;
 
 var yandexBotClient = new YandexBotClient("y0_AgAAAABpcG7nAATIlgAAAADfEDmUxFhibOUVTACs7DvIS-bz8QVZ-pI");
 
@@ -24,10 +24,6 @@ yandexBotClient.Updates.Subscribe("/stat", update =>
 
 while (true)
 {
-    await yandexBotClient.Updates.GetUpdates(new GetUpdateRequest()
-    {
-        Offset = 
-    });
-
+    await yandexBotClient.Updates.GetUpdates(new GetUpdateRequest());
     await Task.Delay(3000);
 }

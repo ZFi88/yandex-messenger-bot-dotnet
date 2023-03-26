@@ -1,7 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\src\Yandex.Messanger.Bot.Sdk\Yandex.Messanger.Bot.Sdk.csproj"/>
-    </ItemGroup>
-
-</Project>
