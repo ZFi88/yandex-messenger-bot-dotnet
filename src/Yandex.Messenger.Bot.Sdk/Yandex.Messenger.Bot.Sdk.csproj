@@ -4,4 +4,11 @@
         <IsPackable>true</IsPackable>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageId>Yandex.Messenger.Bot.Sdk</PackageId>
+        <Version>1.0.0-dev01</Version>
+        <PackageReleaseNotes>*</PackageReleaseNotes>
+        <Description>Yandex Messenger bots API library.</Description>
+    </PropertyGroup>
+
 </Project>

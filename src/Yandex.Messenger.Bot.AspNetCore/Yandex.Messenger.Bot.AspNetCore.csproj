@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 
+    <PropertyGroup>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+    
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
@@ -13,5 +17,12 @@
     <ItemGroup>
         <ProjectReference Include="..\Yandex.Messenger.Bot.Sdk\Yandex.Messenger.Bot.Sdk.csproj" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <PackageId>Yandex.Messenger.Bot.AspNetCore</PackageId>
+        <Version>1.0.0-dev01</Version>
+        <PackageReleaseNotes>*</PackageReleaseNotes>
+        <Description>ASP.NET integration library for Yandex Messenger bots API.</Description>
+    </PropertyGroup>
 
 </Project>

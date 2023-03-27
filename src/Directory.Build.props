@@ -7,7 +7,7 @@
         <LangVersion>11</LangVersion>
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
             <PrivateAssets>all</PrivateAssets>
@@ -23,4 +23,19 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <Product>Yandex.Messenger.Bot.Sdk</Product>
+        <PackageTags>Yandex Messenger Bot Sdk</PackageTags>
+        <Company>zfi</Company>
+        <Authors>Zhekov Fedor</Authors>
+        <Copyright>Copyright ©2023 Zhekov Fedor</Copyright>
+        <PackageProjectUrl>https://github.com/ZFi88/yandex-messenger-bot-dotnet</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/ZFi88/yandex-messenger-bot-dotnet.git</RepositoryUrl>
+        <PackageIcon>avatar.png</PackageIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\avatar.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
 </Project>
