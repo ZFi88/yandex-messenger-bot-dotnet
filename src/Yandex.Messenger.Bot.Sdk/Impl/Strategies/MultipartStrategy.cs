@@ -31,6 +31,8 @@ internal abstract class MultipartStrategy<TRequest> : BaseStrategy<TRequest>
             content.Add(new StringContent(sendFileRequest.Login!), "login");
         }
 
+        request.Content = content;
+
         return request;
     }
 }
