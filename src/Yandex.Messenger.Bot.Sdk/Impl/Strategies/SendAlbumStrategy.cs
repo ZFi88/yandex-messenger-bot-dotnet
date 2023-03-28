@@ -4,6 +4,10 @@ using Models.Requests;
 
 internal class SendAlbumStrategy : MultipartStrategy<SendAlbumRequest>
 {
+    protected override string Endpoint => "messages/sendGallery";
+
+    protected override string FilePartName => "images";
+
     protected override HttpRequestMessage CreateRequestInner(SendAlbumRequest sendFileRequest)
     {
         var request = base.CreateRequestInner(sendFileRequest);
@@ -12,7 +16,7 @@ internal class SendAlbumStrategy : MultipartStrategy<SendAlbumRequest>
         foreach (var kv in sendFileRequest.Images)
         {
             var streamContent = new StreamContent(kv.Value);
-            content.Add(streamContent, "images", kv.Key);
+            content.Add(streamContent, FilePartName, kv.Key);
         }
 
         return request;

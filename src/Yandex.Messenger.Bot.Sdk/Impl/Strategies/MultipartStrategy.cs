@@ -3,12 +3,16 @@ namespace Yandex.Messenger.Bot.Sdk.Impl.Strategies;
 using Exceptions;
 using Models.Requests;
 
-internal class MultipartStrategy<TRequest> : BaseStrategy<TRequest>
+internal abstract class MultipartStrategy<TRequest> : BaseStrategy<TRequest>
     where TRequest : FileRequest
 {
+    protected abstract string Endpoint { get; }
+
+    protected abstract string FilePartName { get; }
+    
     protected override HttpRequestMessage CreateRequestInner(TRequest sendFileRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "messages/sendGallery");
+        var request = new HttpRequestMessage(HttpMethod.Post, Endpoint);
         request.Headers.ExpectContinue = false;
         var content = new MultipartFormDataContent();
 
