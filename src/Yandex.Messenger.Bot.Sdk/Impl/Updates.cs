@@ -7,7 +7,7 @@ using Strategies;
 
 internal class Updates : BaseClient, IUpdates
 {
-    private readonly IDictionary<string, IObserver> _observers = new Dictionary<string, IObserver>();
+    private readonly Dictionary<string, IObserver> _observers = new Dictionary<string, IObserver>();
 
     public Updates(HttpClient client)
         : base(client)
@@ -45,6 +45,6 @@ internal class Updates : BaseClient, IUpdates
 
     public void Subscribe(IObserver observer)
     {
-        _observers.TryAdd(observer.Message ?? string.Empty, observer);
+        _observers.Add(observer.Message ?? string.Empty, observer);
     }
 }

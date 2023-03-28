@@ -10,7 +10,10 @@ public class TimestampToDateTimeConverter : JsonConverter<DateTime>
 {
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return DateTime.UnixEpoch.AddMilliseconds(reader.GetInt64());
+        // Unix timestamp is seconds past epoch
+        var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddSeconds(reader.GetInt64()).ToLocalTime();
+        return dateTime;
     }
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)

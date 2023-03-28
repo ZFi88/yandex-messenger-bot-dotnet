@@ -24,7 +24,7 @@ internal abstract class BaseClient
     {
         var request = strategy.CreateRequest(payload);
         var response = await _client.SendAsync(request, stoppingToken);
-        var stream = await response.Content.ReadAsStreamAsync(stoppingToken);
+        var stream = await response.Content.ReadAsStreamAsync();
         if (response.StatusCode != HttpStatusCode.OK)
         {
             throw new BotException();
