@@ -1,10 +1,6 @@
 namespace Yandex.Messenger.Bot.Sdk.Models.Requests;
 
-public record SendAlbumRequest
+public record SendAlbumRequest(string? ChatId, string? Login) : FileRequest(ChatId, Login)
 {
-    public string? ChatId { get; init; }
-
-    public string? Login { get; init; }
-
-    public required Stream[] Images { get; init; }
+    public required Dictionary<string, Stream> Images { get; init; }
 }

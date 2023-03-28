@@ -6,6 +6,7 @@ using System.Text.Json;
 using Exceptions;
 using Json;
 using Models.Responses;
+using Strategies;
 
 internal abstract class BaseClient
 {
@@ -18,17 +19,12 @@ internal abstract class BaseClient
         _options = YandexMessengerBotJsonOptions.Value;
     }
 
-    protected async Task<TResp> Send<TResp>(string endpoint, HttpMethod method, object payload, CancellationToken stoppingToken)
+    protected async Task<TResp> Send<TResp>(ISendStrategy strategy, object payload, CancellationToken stoppingToken)
         where TResp : Response
     {
-        var content = new StringContent(JsonSerializer.Serialize(payload, _options), Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(method, endpoint)
-        {
-            Content = content
-        };
+        var request = strategy.CreateRequest(payload);
         var response = await _client.SendAsync(request, stoppingToken);
         var stream = await response.Content.ReadAsStreamAsync(stoppingToken);
-        var st = await response.Content.ReadAsStringAsync(stoppingToken);
         if (response.StatusCode != HttpStatusCode.OK)
         {
             throw new BotException();

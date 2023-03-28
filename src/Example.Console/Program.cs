@@ -11,6 +11,7 @@ yandexBotClient.Updates.Subscribe(update =>
     Console.WriteLine("from common observer");
     Console.WriteLine(update);
 
+    offset = update.UpdateId + 1;
     return Task.CompletedTask;
 });
 

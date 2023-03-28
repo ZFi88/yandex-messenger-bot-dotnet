@@ -3,6 +3,7 @@
 using Abstractions;
 using Models.Requests;
 using Models.Responses;
+using Strategies;
 
 internal class Updates : BaseClient, IUpdates
 {
@@ -17,7 +18,7 @@ internal class Updates : BaseClient, IUpdates
 
     public async Task<Response> GetUpdates(GetUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await Send<GetUpdateResponse>("messages/getUpdates", HttpMethod.Post, request, cancellationToken)
+        var response = await Send<GetUpdateResponse>(new SendJsonStrategy("messages/getUpdates"), request, cancellationToken)
             .ConfigureAwait(false);
 
         foreach (var update in response.Updates)
@@ -38,7 +39,7 @@ internal class Updates : BaseClient, IUpdates
 
     public async Task<SetWebhookResponse> SetWebhook(SetWebhookRequest request, CancellationToken cancellationToken = default)
     {
-        return await Send<SetWebhookResponse>("self/update", HttpMethod.Post, request, cancellationToken)
+        return await Send<SetWebhookResponse>(new SendJsonStrategy("self/update"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 

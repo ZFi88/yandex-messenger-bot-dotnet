@@ -3,6 +3,7 @@
 using Abstractions;
 using Models.Requests;
 using Models.Responses;
+using Strategies;
 
 internal class Polls : BaseClient, IPolls
 {
@@ -13,19 +14,19 @@ internal class Polls : BaseClient, IPolls
 
     public async Task<CreatePollResponse> CreatePoll(CreatePollRequest request, CancellationToken cancellationToken = default)
     {
-        return await Send<CreatePollResponse>("messages/sendFile", HttpMethod.Post, request, cancellationToken)
+        return await Send<CreatePollResponse>(new SendJsonStrategy("messages/sendFile"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
     public async Task<PollResultsResponse> GetPollResults(PollResultsRequest request, CancellationToken cancellationToken = default)
     {
-        return await Send<PollResultsResponse>("messages/sendFile", HttpMethod.Post, request, cancellationToken)
+        return await Send<PollResultsResponse>(new SendJsonStrategy("messages/sendFile"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
     public async Task<GetVotersResponse> GetVoters(GetVotersRequest request, CancellationToken cancellationToken = default)
     {
-        return await Send<GetVotersResponse>("messages/sendFile", HttpMethod.Post, request, cancellationToken)
+        return await Send<GetVotersResponse>(new SendJsonStrategy("messages/sendFile"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 }

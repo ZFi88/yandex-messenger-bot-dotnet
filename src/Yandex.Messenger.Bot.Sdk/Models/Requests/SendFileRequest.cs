@@ -1,10 +1,8 @@
 namespace Yandex.Messenger.Bot.Sdk.Models.Requests;
 
-public record SendFileRequest
+public record SendFileRequest(string? ChatId, string? Login) : FileRequest(ChatId, Login)
 {
-    public string? ChatId { get; init; }
-
-    public string? Login { get; init; }
+    public required string Filename { get; init; }
 
     public required Stream Document { get; init; }
 }
