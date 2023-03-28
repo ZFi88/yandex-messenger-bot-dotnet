@@ -5,7 +5,7 @@ using Middleware;
 
 public static class ApplicationBuilderExtensions
 {
-    public static IApplicationBuilder UseYandexMessangerWebhook(this IApplicationBuilder builder)
+    public static IApplicationBuilder UseYandexMessengerWebhook(this IApplicationBuilder builder)
     {
         return builder.UseMiddleware<WebhookMiddleware>();
     }

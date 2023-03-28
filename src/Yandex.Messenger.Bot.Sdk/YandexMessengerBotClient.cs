@@ -4,7 +4,7 @@ using System.Net.Http.Headers;
 using Abstractions;
 using Impl;
 
-public class YandexMessengerBotClient : IYandexMessangerBotClient
+public class YandexMessengerBotClient : IYandexMessengerBotClient
 {
     public const string YandexMessengerBotApiBaseAddress = "https://botapi.messenger.yandex.net/bot/v1/";
     private static HttpClient _httpClient = null!;

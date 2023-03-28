@@ -16,22 +16,22 @@ public static class ServiceCollectionsExtensions
     public static IServiceCollection AddYandexMessengerBotSdk(this IServiceCollection services, IConfiguration cfg)
     {
         services.Configure<YandexMessengerBotOptions>(cfg.GetSection(YandexMessengerBotOptions.SectionName));
-        services.AddHttpClient<IYandexMessangerBotClient>((provider, client) =>
+        services.AddHttpClient<IYandexMessengerBotClient>((provider, client) =>
         {
             var options = provider.GetService<IOptions<YandexMessengerBotOptions>>();
             client.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("OAuth", options!.Value.Token);
         });
-        services.AddTransient<IYandexMessangerBotClient, YandexMessengerBotClient>(provider =>
+        services.AddTransient<IYandexMessengerBotClient, YandexMessengerBotClient>(provider =>
             {
                 var httpClient = provider.GetService<IHttpClientFactory>()!
-                    .CreateClient(nameof(IYandexMessangerBotClient));
+                    .CreateClient(nameof(IYandexMessengerBotClient));
                 return new YandexMessengerBotClient(httpClient);
             })
-            .AddTransient<IChats>(provider => provider.GetRequiredService<IYandexMessangerBotClient>().Chats)
-            .AddTransient<IPolls>(provider => provider.GetRequiredService<IYandexMessangerBotClient>().Polls)
-            .AddTransient<IUpdates>(provider => provider.GetRequiredService<IYandexMessangerBotClient>().Updates);
+            .AddTransient<IChats>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Chats)
+            .AddTransient<IPolls>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Polls)
+            .AddTransient<IUpdates>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Updates);
 
         return services;
     }

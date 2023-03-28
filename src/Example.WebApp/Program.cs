@@ -20,7 +20,7 @@ builder.Services.AddYandexMessengerObserver<MyObserver>();
 
 var app = builder.Build();
 
-app.UseYandexMessangerWebhook();
+app.UseYandexMessengerWebhook();
 
 app.MapControllers();
 

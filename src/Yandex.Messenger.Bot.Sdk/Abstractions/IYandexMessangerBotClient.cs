@@ -1,6 +1,6 @@
 ﻿namespace Yandex.Messenger.Bot.Sdk.Abstractions;
 
-public interface IYandexMessangerBotClient
+public interface IYandexMessengerBotClient
 {
     public IChats Chats { get; }
 
