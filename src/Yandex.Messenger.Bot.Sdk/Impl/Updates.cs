@@ -7,7 +7,8 @@ using Strategies;
 
 internal class Updates : BaseClient, IUpdates
 {
-    private readonly Dictionary<string, IObserver> _observers = new Dictionary<string, IObserver>();
+    private readonly Dictionary<string, IObserver> _observers = new();
+    private long _offset = 0L;
 
     public Updates(HttpClient client)
         : base(client)
@@ -18,6 +19,7 @@ internal class Updates : BaseClient, IUpdates
 
     public async Task<Response> GetUpdates(GetUpdateRequest request, CancellationToken cancellationToken = default)
     {
+        request = request with { Offset = _offset };
         var response = await Send<GetUpdateResponse>(new SendJsonStrategy("messages/getUpdates"), request, cancellationToken)
             .ConfigureAwait(false);
 
@@ -25,12 +27,14 @@ internal class Updates : BaseClient, IUpdates
         {
             if (_observers.TryGetValue(string.Empty, out var observer))
             {
-                await observer.OnNewUpdate(update);
+                await observer.OnNewUpdate(update, cancellationToken);
+                _offset = update.UpdateId + 1;
             }
 
             if (_observers.TryGetValue(update.Text, out observer))
             {
-                await observer.OnNewUpdate(update);
+                await observer.OnNewUpdate(update, cancellationToken);
+                _offset = update.UpdateId + 1;
             }
         }
 

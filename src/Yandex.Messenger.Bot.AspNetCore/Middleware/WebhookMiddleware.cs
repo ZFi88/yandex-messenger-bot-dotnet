@@ -26,7 +26,10 @@ public class WebhookMiddleware
         _yandexMessengerBotOptions = options.Value!;
     }
 
-    public async Task InvokeAsync(HttpContext context, IEnumerable<IObserver> observers)
+    public async Task InvokeAsync(
+        HttpContext context,
+        IEnumerable<IObserver> observers,
+        CancellationToken cancellationToken)
     {
         var observersLookup = observers.ToLookup(x => x.Message);
         var webhookUrl = _yandexMessengerBotOptions.WebhookUrl!;
@@ -39,13 +42,13 @@ public class WebhookMiddleware
                 var globalObservers = observersLookup[string.Empty];
                 foreach (var observer in globalObservers)
                 {
-                    await observer.OnNewUpdate(update);
+                    await observer.OnNewUpdate(update, cancellationToken);
                 }
 
                 var mesObservers = observersLookup[update.Text];
                 foreach (var observer in mesObservers)
                 {
-                    await observer.OnNewUpdate(update);
+                    await observer.OnNewUpdate(update, cancellationToken);
                 }
             }
 

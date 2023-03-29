@@ -2,36 +2,29 @@
 using Yandex.Messenger.Bot.Sdk.Extensions;
 using Yandex.Messenger.Bot.Sdk.Models.Requests;
 
-var yandexBotClient = new YandexMessengerBotClient("y0_AgAAAABpcG7nAATIlgAAAADfEDmUxFhibOUVTACs7DvIS-bz8QVZ-pI");
+var yandexBotClient = new YandexMessengerBotClient("<TOKEN>");
 
-var offset = 0L;
 
-yandexBotClient.Updates.Subscribe(update =>
+yandexBotClient.Updates.Subscribe((update, token) =>
 {
     Console.WriteLine("from common observer");
     Console.WriteLine(update);
-
-    offset = update.UpdateId + 1;
     return Task.CompletedTask;
 });
 
-yandexBotClient.Updates.Subscribe("/stat", async update =>
+yandexBotClient.Updates.Subscribe("/stat", async (update, token) =>
 {
     Console.WriteLine("from stat observer");
     Console.WriteLine(update);
     await yandexBotClient.Chats.SendMessage(new SendMessageRequest()
     {
         Text = "привет!!!!!", Login = update.From.Login
-    });
+    }, token);
 
-    offset = update.UpdateId + 1;
 });
 
 while (true)
 {
-    await yandexBotClient.Updates.GetUpdates(new GetUpdateRequest()
-    {
-        Offset = offset
-    });
+    await yandexBotClient.Updates.GetUpdates(new GetUpdateRequest());
     await Task.Delay(3000);
 }

@@ -20,7 +20,7 @@
 
     <PropertyGroup>
         <PackageId>Yandex.Messenger.Bot.AspNetCore</PackageId>
-        <Version>0.0.1-dev06</Version>
+        <Version>0.0.1-dev07</Version>
         <PackageReleaseNotes>*</PackageReleaseNotes>
         <Description>ASP.NET integration library for Yandex Messenger bots API.</Description>
     </PropertyGroup>

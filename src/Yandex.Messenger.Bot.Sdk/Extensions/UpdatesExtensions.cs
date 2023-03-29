@@ -6,12 +6,12 @@ using Models;
 
 public static class UpdatesExtensions
 {
-    public static void Subscribe(this IUpdates updates, Func<Update, Task> func)
+    public static void Subscribe(this IUpdates updates, Func<Update, CancellationToken, Task> func)
     {
         updates.Subscribe(new Observer(null!, func));
     }
 
-    public static void Subscribe(this IUpdates updates, string msg, Func<Update, Task> func)
+    public static void Subscribe(this IUpdates updates, string msg, Func<Update, CancellationToken, Task> func)
     {
         updates.Subscribe(new Observer(msg, func));
     }

@@ -4,5 +4,5 @@ public record GetUpdateRequest
 {
     public int Limit { get; init; } = 100;
 
-    public long Offset { get; init; } = 0;
+    internal long Offset { get; init; } = 0;
 }

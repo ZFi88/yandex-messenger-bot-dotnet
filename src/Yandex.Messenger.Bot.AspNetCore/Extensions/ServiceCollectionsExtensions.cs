@@ -39,14 +39,14 @@ public static class ServiceCollectionsExtensions
     public static IServiceCollection AddYandexMessengerObserver(
         this IServiceCollection services,
         string message,
-        Func<IServiceProvider, Update, Task> messageHandler)
+        Func<IServiceProvider, Update, CancellationToken, Task> messageHandler)
     {
         return services.AddTransient<IObserver>(provider => new WebhookObserver(provider, message, messageHandler));
     }
 
     public static IServiceCollection AddYandexMessengerObserver(
         this IServiceCollection services,
-        Func<IServiceProvider, Update, Task> messageHandler)
+        Func<IServiceProvider, Update, CancellationToken, Task> messageHandler)
     {
         return services.AddTransient<IObserver>(provider => new WebhookObserver(provider, string.Empty, messageHandler));
     }

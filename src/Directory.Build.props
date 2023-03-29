@@ -29,7 +29,7 @@
         <Product>Yandex.Messenger.Bot.Sdk</Product>
         <PackageTags>Yandex Messenger Bot Sdk</PackageTags>
         <Company>zfi</Company>
-        <Authors>Zhekov Fedor</Authors>
+        <Authors>Fedor Zhekov</Authors>
         <Copyright>Copyright ©2023 Zhekov Fedor</Copyright>
         <PackageProjectUrl>https://github.com/ZFi88/yandex-messenger-bot-dotnet</PackageProjectUrl>
         <RepositoryUrl>https://github.com/ZFi88/yandex-messenger-bot-dotnet.git</RepositoryUrl>

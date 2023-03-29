@@ -5,9 +5,9 @@ using Models;
 
 internal class Observer : IObserver
 {
-    private readonly Func<Update, Task> _func;
+    private readonly Func<Update, CancellationToken, Task> _func;
 
-    public Observer(string? message, Func<Update, Task> func)
+    public Observer(string? message, Func<Update, CancellationToken, Task> func)
     {
         Message = message;
         _func = func;
@@ -15,8 +15,8 @@ internal class Observer : IObserver
 
     public string? Message { get; }
 
-    public Task OnNewUpdate(Update update)
+    public Task OnNewUpdate(Update update, CancellationToken cancellationToken)
     {
-        return _func.Invoke(update);
+        return _func.Invoke(update, cancellationToken);
     }
 }

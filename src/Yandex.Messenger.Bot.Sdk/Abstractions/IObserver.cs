@@ -6,5 +6,5 @@ public interface IObserver
 {
     public string? Message { get; }
 
-    Task OnNewUpdate(Update update);
+    Task OnNewUpdate(Update update, CancellationToken cancellationToken);
 }

@@ -6,12 +6,12 @@ using Sdk.Models;
 internal class WebhookObserver : IObserver
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly Func<IServiceProvider, Update, Task> _messageHandler;
+    private readonly Func<IServiceProvider, Update, CancellationToken, Task> _messageHandler;
 
     public WebhookObserver(
         IServiceProvider serviceProvider,
         string? message,
-        Func<IServiceProvider, Update, Task> messageHandler)
+        Func<IServiceProvider, Update, CancellationToken, Task> messageHandler)
     {
         Message = message;
         _serviceProvider = serviceProvider;
@@ -20,8 +20,8 @@ internal class WebhookObserver : IObserver
 
     public string? Message { get; }
 
-    public Task OnNewUpdate(Update update)
+    public Task OnNewUpdate(Update update, CancellationToken cancellationToken)
     {
-        return _messageHandler.Invoke(_serviceProvider, update);
+        return _messageHandler.Invoke(_serviceProvider, update, cancellationToken);
     }
 }
