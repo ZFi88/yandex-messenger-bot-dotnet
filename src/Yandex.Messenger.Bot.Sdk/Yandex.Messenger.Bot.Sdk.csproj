@@ -6,7 +6,7 @@
 
     <PropertyGroup>
         <PackageId>Yandex.Messenger.Bot.Sdk</PackageId>
-        <Version>0.0.1-dev07</Version>
+        <Version>0.0.1-dev09</Version>
         <PackageReleaseNotes>*</PackageReleaseNotes>
         <Description>Yandex Messenger bots API library.</Description>
     </PropertyGroup>

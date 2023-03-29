@@ -19,8 +19,11 @@ internal class Updates : BaseClient, IUpdates
 
     public async Task<Response> GetUpdates(GetUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        request = request with { Offset = _offset };
-        var response = await Send<GetUpdateResponse>(new SendJsonStrategy("messages/getUpdates"), request, cancellationToken)
+        var payload = new GetUpdateRequestInternal()
+        {
+            Limit = request.Limit, Offset = _offset
+        };
+        var response = await Send<GetUpdateResponse>(new SendJsonStrategy("messages/getUpdates"), payload, cancellationToken)
             .ConfigureAwait(false);
 
         foreach (var update in response.Updates)
@@ -28,14 +31,17 @@ internal class Updates : BaseClient, IUpdates
             if (_observers.TryGetValue(string.Empty, out var observer))
             {
                 await observer.OnNewUpdate(update, cancellationToken);
-                _offset = update.UpdateId + 1;
             }
 
             if (_observers.TryGetValue(update.Text, out observer))
             {
                 await observer.OnNewUpdate(update, cancellationToken);
-                _offset = update.UpdateId + 1;
             }
+        }
+
+        if (response.Updates.Any() && _observers.Any())
+        {
+            _offset = response.Updates.Max(x => x.UpdateId) + 1;
         }
 
         return response;

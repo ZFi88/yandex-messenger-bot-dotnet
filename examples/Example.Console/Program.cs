@@ -4,7 +4,6 @@ using Yandex.Messenger.Bot.Sdk.Models.Requests;
 
 var yandexBotClient = new YandexMessengerBotClient("<TOKEN>");
 
-
 yandexBotClient.Updates.Subscribe((update, token) =>
 {
     Console.WriteLine("from common observer");

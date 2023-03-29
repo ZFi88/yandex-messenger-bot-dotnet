@@ -10,7 +10,7 @@ public static class YandexMessengerBotJsonOptions
         Value = new JsonSerializerOptions()
         {
             PropertyNameCaseInsensitive = true, PropertyNamingPolicy = new SerializePolicy(),
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
         };
         Value.Converters.Add(new TimestampToDateTimeConverter());
     }

@@ -13,12 +13,14 @@ internal class SendJsonStrategy : ISendStrategy
         _endpoint = endpoint;
     }
 
-    public HttpRequestMessage CreateRequest(object payload) =>
-        new HttpRequestMessage(HttpMethod.Post, _endpoint)
+    public HttpRequestMessage CreateRequest(object payload)
+    {
+        return new HttpRequestMessage(HttpMethod.Post, _endpoint)
         {
             Content = new StringContent(
                 JsonSerializer.Serialize(payload, YandexMessengerBotJsonOptions.Value),
                 Encoding.UTF8,
                 "application/json")
         };
+    }
 }
