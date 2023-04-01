@@ -3,7 +3,7 @@ using Bimlab.Nuke.Components;
 using Nuke.Common.CI.GitHubActions;
 
 [GitHubActions("CI",
-    GitHubActionsImage.WindowsLatest,
+    GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPushBranches = new[]
     {
