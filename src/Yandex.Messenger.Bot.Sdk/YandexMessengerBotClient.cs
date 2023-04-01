@@ -39,13 +39,13 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
     }
 
     /// <inheritdoc />
-    public IChats Chats { get; private set; }
+    public IChats Chats { get; private set; } = null!;
 
     /// <inheritdoc />
-    public IPolls Polls { get; private set; }
+    public IPolls Polls { get; private set; } = null!;
 
     /// <inheritdoc />
-    public IUpdates Updates { get; private set; }
+    public IUpdates Updates { get; private set; } = null!;
 
     /// <inheritdoc />
     public void Dispose()

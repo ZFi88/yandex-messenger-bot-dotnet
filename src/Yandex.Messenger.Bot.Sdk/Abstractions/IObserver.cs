@@ -10,7 +10,6 @@ public interface IObserver
     /// <summary>
     /// The observer subscription message text.
     /// </summary>
-
     public string? Message { get; }
 
     /// <summary>

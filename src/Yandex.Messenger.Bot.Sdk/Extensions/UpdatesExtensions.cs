@@ -20,7 +20,7 @@ public static class UpdatesExtensions
     }
 
     /// <summary>
-    /// Subscribes on messages with <see cref="msg"/> text..
+    /// Subscribes on messages with message text.
     /// </summary>
     /// <param name="updates">An <see cref="IUpdates"/> object.</param>
     /// <param name="msg">A message text.</param>
