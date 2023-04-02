@@ -12,6 +12,10 @@
 
   <ItemGroup>
     <PackageReference Include="BimLab.Nuke" Version="2023.1.0-dev04" />
+    <PackageReference Include="NuGet.CommandLine" Version="6.4.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Nuke.Common" Version="6.3.0" />
   </ItemGroup>
 
