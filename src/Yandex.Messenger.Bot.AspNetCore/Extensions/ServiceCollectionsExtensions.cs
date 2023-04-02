@@ -47,7 +47,7 @@ public static class ServiceCollectionsExtensions
     /// <summary>
     /// Adds an observer of an updates.
     /// </summary>
-    /// <param name="services">The DIN container</param>
+    /// <param name="services">The DIN container.</param>
     /// <param name="message">The text of a message for observing.</param>
     /// <param name="messageHandler">A function for updates handling.</param>
     public static IServiceCollection AddYandexMessengerObserver(

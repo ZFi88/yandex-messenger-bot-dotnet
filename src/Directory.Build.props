@@ -6,6 +6,7 @@
         <IsPackable>false</IsPackable>
         <LangVersion>11</LangVersion>
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
+        <NoWarn>CS1573</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

@@ -9,7 +9,7 @@ builder.Services.AddYandexMessengerBotSdk(builder.Configuration);
 builder.Services.AddYandexMessengerObserver((provider, update, cancellationToken) =>
 {
     var logger = provider.GetService<ILogger<Program>>();
-    logger.LogInformation("common observer", update);
+    logger!.LogInformation("common observer", update);
 
     return Task.CompletedTask;
 });
