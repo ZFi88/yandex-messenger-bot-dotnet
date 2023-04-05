@@ -1,3 +1,113 @@
-# Yandex messanger bot dotnet SdK
+# Yandex Messenger Bot dotnet SDK
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-## WIP
+
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zfi88/yandex-messenger-bot-dotnet/CI.yml?label=CI&style=for-the-badge)
+
+![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Yandex.Messenger.Bot.Sdk?label=Yandex.Messenger.Bot.Sdk&style=for-the-badge)
+![Nuget](https://img.shields.io/nuget/v/Yandex.Messenger.Bot.Sdk?label=Yandex.Messenger.Bot.Sdk&style=for-the-badge)
+
+![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Yandex.Messenger.Bot.AspNetCore?label=Yandex.Messenger.AspNetCore&style=for-the-badge)
+![Nuget](https://img.shields.io/nuget/v/Yandex.Messenger.Bot.AspNetCore?label=Yandex.Messenger.AspNetCore.Sdk&style=for-the-badge)
+
+This repository represents dotnet wrapper for Yandex Messenger Bot API.
+The repository contains two libraries:
+* [Yandex.Messenger.Bot.Sdk](https://www.nuget.org/packages/Yandex.Messenger.Bot.Sdk) -
+contains number of objects and abstractions that covers all [API](https://botapi.messenger.yandex.net/docs/) methods.
+* [Yandex.Messenger.Bot.AspNetCore](https://www.nuget.org/packages/Yandex.Messenger.Bot.AspNetCore) - 
+contains numbers of extension methods for integrating SDK into an ASP.NET Core applications using webhooks.
+
+--------------------
+
+## Usage
+
+### Pre requirements
+
+Create a new bot and generate a new access token in the [admin console](https://admin.yandex.ru/bot-platform). Also for
+ASP.NET applications you can setup a webhook url.
+
+### Console applications
+
+Install package: `dotnet add package Yandex.Messenger.Bot.Sdk`
+
+Create the bot client using generated access token:
+```csharp
+var yandexBotClient = new YandexMessengerBotClient("<TOKEN>");
+```
+Subscribe on all messages:
+```csharp
+yandexBotClient.Updates.Subscribe(async (update, cancel) =>
+{
+    await yandexBotClient.Chats.SendMessage(new SendMessageRequest
+    {
+        Text = $"{update.From.Login} you sent: \"{update.Text}\"",
+        ChatId = update.Chat.Id
+    }, cancel);
+});
+```
+
+Or subscribe on concrete messages:
+```csharp
+yandexBotClient.Updates.Subscribe("/help", async (update, token) =>
+{
+    await yandexBotClient.Chats.SendMessage(new SendMessageRequest()
+    {
+        Text = $"Hi, {update.From.Login}! I'm EchoBot, I'll repeat all your messages!", 
+        ChatId = update.Chat.Id
+    }, token);
+})
+```
+
+Poll updates from chats:
+```csharp
+while (true)
+{
+    await yandexBotClient.Updates.GetUpdates(new GetUpdateRequest());
+    await Task.Delay(3000);
+}
+```
+
+### ASP.NET Core applications
+
+Install package: `dotnet add package Yandex.Messenger.Bot.AspNetCore`
+
+Add configuration to your application:
+```json
+{
+  "YandexMessengerBot": {
+    "Token": "<TOKEN>",
+    "WebhookUrl": "https://webhook.com/hook"
+  }
+}
+```
+
+Setup a container:
+```csharp
+builder.Services.AddYandexMessengerBotSdk(builder.Configuration);
+```
+
+Subscribe on messages:
+```csharp
+builder.Services.AddYandexMessengerObserver(async (provider, update, cancellationToken) =>
+{
+    var logger = provider.GetService<ILogger<Program>>();
+    logger!.LogInformation(
+        "User {login} sent message: {msg}.",
+        update.From.Login,
+        update.Text);
+
+    var chats = provider.GetService<IChats>();
+    await chats!.SendMessage(new SendMessageRequest
+    {
+        Text = $"{update.From.Login} you sent: \"{update.Text}\"",
+        ChatId = update.Chat.Id
+    }, cancellationToken);
+});
+```
+
+Insert webhook handler into a middleware pipeline:
+```csharp
+app.UseYandexMessengerWebhook();
+```
+
+Look for the full [examples](https://github.com/ZFi88/yandex-messenger-bot-dotnet/tree/develop/examples)!

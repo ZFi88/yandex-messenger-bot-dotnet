@@ -4,23 +4,25 @@ using Yandex.Messenger.Bot.Sdk.Models.Requests;
 
 var yandexBotClient = new YandexMessengerBotClient("<TOKEN>");
 
-yandexBotClient.Updates.Subscribe((update, token) =>
+yandexBotClient.Updates.Subscribe(async (update, cancel) =>
 {
-    Console.WriteLine("from common observer");
-    Console.WriteLine(update);
-    return Task.CompletedTask;
+    await yandexBotClient.Chats.SendMessage(new SendMessageRequest
+    {
+        Text = $"{update.From.Login} you sent: \"{update.Text}\"",
+        ChatId = update.Chat.Id
+    }, cancel);
 });
 
-yandexBotClient.Updates.Subscribe("/stat", async (update, token) =>
+yandexBotClient.Updates.Subscribe("/help", async (update, token) =>
 {
-    Console.WriteLine("from stat observer");
-    Console.WriteLine(update);
     await yandexBotClient.Chats.SendMessage(new SendMessageRequest()
     {
-        Text = "привет!!!!!", Login = update.From.Login
+        Text = $"Hi, {update.From.Login}! I'm EchoBot, I'll repeat all your messages!",
+        ChatId = update.Chat.Id
     }, token);
-
 });
+
+yandexBotClient.Updates.Subscribe(new HelpObserver(yandexBotClient.Chats));
 
 while (true)
 {

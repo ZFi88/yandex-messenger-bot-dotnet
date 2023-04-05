@@ -1,18 +1,16 @@
 ﻿using Yandex.Messenger.Bot.Sdk.Abstractions;
 using Yandex.Messenger.Bot.Sdk.Models;
 
-public class MyObserver : IObserver
+public class LoggingObserver : IObserver
 {
-    private readonly ILogger<MyObserver> _logger;
-    private readonly IChats _chats;
+    private readonly ILogger<LoggingObserver> _logger;
 
-    public MyObserver(ILogger<MyObserver> logger, IChats chats)
+    public LoggingObserver(ILogger<LoggingObserver> logger)
     {
         _logger = logger;
-        _chats = chats;
     }
 
-    public string? Message => "text";
+    public string? Message => null!;
 
     public Task OnNewUpdate(Update update, CancellationToken cancellationToken)
     {
