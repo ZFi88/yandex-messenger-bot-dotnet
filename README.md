@@ -1,14 +1,14 @@
 # Yandex Messenger Bot dotnet SDK
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zfi88/yandex-messenger-bot-dotnet/CI.yml?label=CI&style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zfi88/yandex-messenger-bot-dotnet/CI.yml?label=CI)
 
-![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Yandex.Messenger.Bot.Sdk?label=Yandex.Messenger.Bot.Sdk&style=for-the-badge)
-![Nuget](https://img.shields.io/nuget/v/Yandex.Messenger.Bot.Sdk?label=Yandex.Messenger.Bot.Sdk&style=for-the-badge)
+![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Yandex.Messenger.Bot.Sdk?label=Yandex.Messenger.Bot.Sdk)
+![Nuget](https://img.shields.io/nuget/v/Yandex.Messenger.Bot.Sdk?label=Yandex.Messenger.Bot.Sdk)
 
-![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Yandex.Messenger.Bot.AspNetCore?label=Yandex.Messenger.AspNetCore&style=for-the-badge)
-![Nuget](https://img.shields.io/nuget/v/Yandex.Messenger.Bot.AspNetCore?label=Yandex.Messenger.AspNetCore.Sdk&style=for-the-badge)
+![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Yandex.Messenger.Bot.AspNetCore?label=Yandex.Messenger.AspNetCore)
+![Nuget](https://img.shields.io/nuget/v/Yandex.Messenger.Bot.AspNetCore?label=Yandex.Messenger.AspNetCore.Sdk)
 
 This repository represents dotnet wrapper for Yandex Messenger Bot API.
 The repository contains two libraries:
