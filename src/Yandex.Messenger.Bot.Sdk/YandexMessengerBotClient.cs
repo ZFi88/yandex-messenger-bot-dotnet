@@ -12,7 +12,7 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
     /// </summary>
     public const string YandexMessengerBotApiBaseAddress = "https://botapi.messenger.yandex.net/bot/v1/";
 
-    private static HttpClient _httpClient = null!;
+    private readonly HttpClient _httpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="YandexMessengerBotClient"/> class.
