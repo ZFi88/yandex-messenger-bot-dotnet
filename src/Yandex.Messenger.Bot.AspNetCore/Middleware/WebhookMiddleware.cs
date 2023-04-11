@@ -39,13 +39,12 @@ internal class WebhookMiddleware
     /// </summary>
     /// <param name="context">The <see cref="HttpContent"/>.</param>
     /// <param name="observers">A collection of message observers.</param>
-    /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     public async Task InvokeAsync(
         HttpContext context,
-        IEnumerable<IObserver> observers,
-        CancellationToken cancellationToken)
+        IEnumerable<IObserver> observers)
     {
+        var cancellationToken = context.RequestAborted;
         var observersLookup = observers.ToLookup(x => x.Message);
         var webhookUrl = _yandexMessengerBotOptions.WebhookUrl!;
         if (webhookUrl.PathAndQuery == context.Request.Path.Value)
