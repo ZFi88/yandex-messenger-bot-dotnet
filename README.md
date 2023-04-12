@@ -76,7 +76,7 @@ Add configuration to your application:
 {
   "YandexMessengerBot": {
     "Token": "<TOKEN>",
-    "WebhookUrl": "https://webhook.com/hook"
+    "WebhookEndpoint": "/hook"
   }
 }
 ```
