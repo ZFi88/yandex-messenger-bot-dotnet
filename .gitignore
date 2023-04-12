@@ -478,3 +478,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 .nuke/temp
+.idea/
