@@ -17,7 +17,7 @@ yandexBotClient.Updates.Subscribe("/help", async (update, token) =>
 {
     await yandexBotClient.Chats.SendMessage(new SendMessageRequest()
     {
-        Text = $"Hi, {update.From.Login}! I'm EchoBot, I'll repeat all your messages!",
+        Text = $"Hi, {update.From.Login}! I'm EchoBot. I repeat all your messages!",
         ChatId = update.Chat.Id
     }, token);
 });
