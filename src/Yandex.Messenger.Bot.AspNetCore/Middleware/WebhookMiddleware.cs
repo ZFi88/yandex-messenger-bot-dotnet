@@ -33,7 +33,7 @@ internal class WebhookMiddleware
                 $"{YandexMessengerBotOptions.SectionName}:{nameof(YandexMessengerBotOptions.WebhookEndpoint)} configuration parameter required");
         }
 
-        _endpoint = options.Value!.WebhookEndpoint;
+        _endpoint = "/" + options.Value!.WebhookEndpoint.Trim(' ', '/');
     }
 
     /// <summary>
