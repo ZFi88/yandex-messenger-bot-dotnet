@@ -16,7 +16,8 @@ using Sdk.Models.Responses;
 internal class WebhookMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly YandexMessengerBotOptions _yandexMessengerBotOptions;
+
+    private readonly string _endpoint;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WebhookMiddleware"/> class.
@@ -26,12 +27,13 @@ internal class WebhookMiddleware
     public WebhookMiddleware(RequestDelegate next, IOptions<YandexMessengerBotOptions> options)
     {
         _next = next;
-        if (options.Value != null && options.Value.WebhookUrl == null)
+        if (options.Value?.WebhookEndpoint == null)
         {
-            throw new BotException();
+            throw new BotException(
+                $"{YandexMessengerBotOptions.SectionName}:{nameof(YandexMessengerBotOptions.WebhookEndpoint)} configuration parameter required");
         }
 
-        _yandexMessengerBotOptions = options.Value!;
+        _endpoint = "/" + options.Value!.WebhookEndpoint.Trim(' ', '/');
     }
 
     /// <summary>
@@ -46,12 +48,14 @@ internal class WebhookMiddleware
     {
         var cancellationToken = context.RequestAborted;
         var observersLookup = observers.ToLookup(x => x.Message);
-        var webhookUrl = _yandexMessengerBotOptions.WebhookUrl!;
-        if (webhookUrl.PathAndQuery == context.Request.Path.Value)
+
+        if (_endpoint.Equals(context.Request.Path.Value, StringComparison.OrdinalIgnoreCase))
         {
-            var response = await JsonSerializer.DeserializeAsync<GetUpdateResponse>(context.Request.Body,
+            var response = await JsonSerializer.DeserializeAsync<GetUpdateResponse>(
+                context.Request.Body,
                 YandexMessengerBotJsonOptions.Value,
                 cancellationToken);
+
             foreach (var update in response!.Updates)
             {
                 var globalObservers = observersLookup[string.Empty];

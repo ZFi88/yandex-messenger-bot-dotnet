@@ -17,7 +17,7 @@ public class HelpObserver : IObserver
     {
         await _chats.SendMessage(new SendMessageRequest()
         {
-            Text = $"Hi, {update.From.Login}! I'm EchoBot, I'll repeat all your messages!",
+            Text = $"Hi, {update.From.Login}! I'm EchoBot. I repeat all your messages!",
             ChatId = update.Chat.Id
         }, cancellationToken);
     }

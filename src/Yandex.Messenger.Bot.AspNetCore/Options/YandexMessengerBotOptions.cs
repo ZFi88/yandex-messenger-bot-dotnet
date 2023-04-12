@@ -16,7 +16,7 @@ public class YandexMessengerBotOptions
     public string? Token { get; init; }
 
     /// <summary>
-    /// The absolute url of a webhook endpoint.
+    /// The webhook endpoint.
     /// </summary>
-    public Uri? WebhookUrl { get; init; }
+    public string WebhookEndpoint { get; init; } = "/hook";
 }
