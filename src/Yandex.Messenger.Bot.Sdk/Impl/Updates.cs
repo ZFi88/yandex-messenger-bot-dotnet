@@ -57,7 +57,7 @@ internal class Updates : BaseClient, IUpdates
     /// <inheritdoc/>
     public async Task<SetWebhookResponse> SetWebhook(SetWebhookRequest request, CancellationToken cancellationToken = default)
     {
-        return await Send<SetWebhookResponse>(new SendJsonStrategy("self/update"), request, cancellationToken)
+        return await Send<SetWebhookResponse>(new SendNullableJsonStrategy("self/update"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
