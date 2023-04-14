@@ -3,6 +3,7 @@
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Middleware;
 using Options;
@@ -10,6 +11,7 @@ using Sdk;
 using Sdk.Abstractions;
 using Sdk.Json;
 using Sdk.Models;
+using Services;
 
 /// <summary>
 /// Extensions for service collection builder.
@@ -40,6 +42,8 @@ public static class ServiceCollectionsExtensions
             .AddTransient<IChats>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Chats)
             .AddTransient<IPolls>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Polls)
             .AddTransient<IUpdates>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Updates);
+
+        services.AddHostedService<IUpdateHandler, UpdateBackgroundHandler>();
 
         return services;
     }
@@ -79,5 +83,13 @@ public static class ServiceCollectionsExtensions
         where TObserver : class, IObserver
     {
         return services.AddTransient<IObserver, TObserver>();
+    }
+
+    private static void AddHostedService<TInterface, TService>(this IServiceCollection services)
+        where TInterface : class
+        where TService : class, IHostedService, TInterface
+    {
+        services.AddSingleton<TInterface, TService>();
+        services.AddSingleton<IHostedService>(p => (TService)p.GetService<TInterface>()!);
     }
 }
