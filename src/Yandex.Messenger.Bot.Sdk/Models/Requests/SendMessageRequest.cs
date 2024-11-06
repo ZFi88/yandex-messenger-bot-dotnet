@@ -43,5 +43,5 @@ public record SendMessageRequest
     /// <summary>
     /// Indicates that in the message should be disabled a preview.
     /// </summary>
-    public bool DisablePreview { get; init; } = false;
+    public bool DisableWebPagePreview { get; init; } = false;
 }
