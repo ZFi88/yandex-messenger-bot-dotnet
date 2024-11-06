@@ -11,4 +11,8 @@
         <Description>Yandex Messenger bots API library.</Description>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Update="System.Text.Json" Version="8.0.5" />
+    </ItemGroup>
+
 </Project>
