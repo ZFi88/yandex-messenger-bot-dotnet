@@ -118,12 +118,24 @@ public class EndpointTests
                     ChatId = "ChatId"
                 }),
             },
+            new object[]
+            {
+                "users/getUserLink",
+                HttpMethod.Get,
+                (IYandexMessengerBotClient x) => x.Chats.GetUserLink(new GetUserLinkRequest()
+                {
+                    Login = "Login"
+                }),
+            },
         };
     }
 
     [Theory]
     [MemberData(nameof(Data))]
-    public async Task SdkMethodsShouldCallCorrectEndpoints(string url, HttpMethod method, Func<IYandexMessengerBotClient, Task> action)
+    public async Task SdkMethodsShouldCallCorrectEndpoints(
+        string url,
+        HttpMethod method,
+        Func<IYandexMessengerBotClient, Task> action)
     {
         using var mockHttp = new MockHttpMessageHandler();
 
@@ -138,6 +150,31 @@ public class EndpointTests
         try
         {
             await action(botClient);
+        }
+        catch
+        {
+            // ignore
+        }
+
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task SdkJsonToQueryStrategyShouldCallCorrectEndpoints()
+    {
+        using var mockHttp = new MockHttpMessageHandler();
+
+        var url = $"{YandexMessengerBotClient.YandexMessengerBotApiBaseAddress}users/getUserLink";
+
+        mockHttp.Expect(HttpMethod.Get, url).WithQueryString("login", "test").Respond(HttpStatusCode.OK);
+        var httpClient = mockHttp.ToHttpClient();
+        httpClient.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
+
+        var botClient = new YandexMessengerBotClient(httpClient);
+
+        try
+        {
+            await botClient.Chats.GetUserLink(new GetUserLinkRequest() { Login = "test" });
         }
         catch
         {

@@ -58,4 +58,11 @@ internal class Chats : BaseClient, IChats
         return await Send<SendMessageResponse>(new SendAlbumStrategy(), request, cancellationToken)
             .ConfigureAwait(false);
     }
+
+    /// <inheritdoc/>
+    public async Task<GetUserLinkResponse> GetUserLink(GetUserLinkRequest request, CancellationToken cancellationToken = default)
+    {
+        return await Send<GetUserLinkResponse>(new SendJsonToQueryStringStrategy("users/getUserLink"), request, cancellationToken)
+            .ConfigureAwait(false);
+    }
 }
