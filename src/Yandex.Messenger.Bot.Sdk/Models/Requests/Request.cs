@@ -1,12 +1,12 @@
 namespace Yandex.Messenger.Bot.Sdk.Models.Requests;
 
 /// <summary>
-/// Represents a file request data.
+/// Represents base request.
 /// </summary>
-public abstract record FileRequest
+public abstract record Request
 {
     /// <summary>
-    /// A chat ID. 
+    /// A chat ID.
     /// </summary>
     public string? ChatId { get; init; }
 
@@ -14,4 +14,9 @@ public abstract record FileRequest
     /// A user login.
     /// </summary>
     public string? Login { get; init; }
+
+    /// <summary>
+    /// The ID of a thread.
+    /// </summary>
+    public int? ThreadId { get; init; } = default;
 }

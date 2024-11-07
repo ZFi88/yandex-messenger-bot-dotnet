@@ -3,18 +3,8 @@ namespace Yandex.Messenger.Bot.Sdk.Models.Requests;
 /// <summary>
 /// Represents voters getting request data.
 /// </summary>
-public record GetVotersRequest
+public record GetVotersRequest : Request
 {
-    /// <summary>
-    /// A chat ID.
-    /// </summary>
-    public string? ChatId { get; init; }
-
-    /// <summary>
-    /// A user login.
-    /// </summary>
-    public string? Login { get; init; }
-
     /// <summary>
     /// A message ID of the poll.
     /// </summary>
