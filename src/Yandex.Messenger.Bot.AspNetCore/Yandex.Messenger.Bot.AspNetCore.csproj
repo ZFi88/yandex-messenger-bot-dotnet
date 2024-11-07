@@ -4,24 +4,23 @@
     <PropertyGroup>
         <IsPackable>true</IsPackable>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-        <PackageReference Update="System.Text.Json" Version="8.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
+        <PackageReference Update="System.Text.Json" Version="8.0.5"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Yandex.Messenger.Bot.Sdk\Yandex.Messenger.Bot.Sdk.csproj" />
+        <ProjectReference Include="..\Yandex.Messenger.Bot.Sdk\Yandex.Messenger.Bot.Sdk.csproj"/>
     </ItemGroup>
 
     <PropertyGroup>
         <PackageId>Yandex.Messenger.Bot.AspNetCore</PackageId>
-        <Version>0.0.1-dev12</Version>
         <PackageReleaseNotes>*</PackageReleaseNotes>
         <Description>ASP.NET integration library for Yandex Messenger bots API.</Description>
     </PropertyGroup>
