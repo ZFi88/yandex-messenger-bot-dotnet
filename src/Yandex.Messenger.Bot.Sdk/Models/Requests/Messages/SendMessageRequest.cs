@@ -44,4 +44,9 @@ public record SendMessageRequest
     /// Indicates that in the message should be disabled a preview.
     /// </summary>
     public bool DisableWebPagePreview { get; init; } = false;
+
+    /// <summary>
+    /// The ID of a thread.
+    /// </summary>
+    public int? ThreadId { get; init; } = default;
 }
