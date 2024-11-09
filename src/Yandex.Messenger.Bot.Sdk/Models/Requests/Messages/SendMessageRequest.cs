@@ -34,4 +34,9 @@ public record SendMessageRequest : Request
     /// Indicates that in the message should be disabled a preview.
     /// </summary>
     public bool DisableWebPagePreview { get; init; } = false;
+
+    /// <summary>
+    /// An array of inline buttons which should be shown bottom of the message.
+    /// </summary>
+    public Button[] InlineKeyboard { get; init; } = Array.Empty<Button>();
 }
