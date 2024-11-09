@@ -1,6 +1,5 @@
 ﻿namespace Yandex.Messenger.Bot.Tests;
 
-using System.Net;
 using Moq;
 using RichardSzalay.MockHttp;
 using Sdk;
@@ -8,7 +7,7 @@ using Sdk.Abstractions;
 using Sdk.Extensions;
 using Sdk.Models;
 using Sdk.Models.Requests;
-using static System.String;
+using static String;
 
 public class UpdatesTests
 {
