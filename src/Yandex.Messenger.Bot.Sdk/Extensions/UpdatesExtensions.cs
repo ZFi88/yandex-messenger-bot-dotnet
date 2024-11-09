@@ -25,7 +25,10 @@ public static class UpdatesExtensions
     /// <param name="updates">An <see cref="IUpdates"/> object.</param>
     /// <param name="msg">A message text.</param>
     /// <param name="messageHandler">The message handler.</param>
-    public static void Subscribe(this IUpdates updates, string msg, Func<Update, CancellationToken, Task> messageHandler)
+    public static void Subscribe(
+        this IUpdates updates,
+        string msg,
+        Func<Update, CancellationToken, Task> messageHandler)
     {
         updates.Subscribe(new Observer(msg, messageHandler));
     }

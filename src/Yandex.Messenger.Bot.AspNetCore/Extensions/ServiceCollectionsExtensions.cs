@@ -8,7 +8,7 @@ using Middleware;
 using Options;
 using Sdk;
 using Sdk.Abstractions;
-using Sdk.Json;
+using Sdk.Impl;
 using Sdk.Models;
 
 /// <summary>
@@ -39,7 +39,8 @@ public static class ServiceCollectionsExtensions
             })
             .AddTransient<IChats>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Chats)
             .AddTransient<IPolls>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Polls)
-            .AddTransient<IUpdates>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Updates);
+            .AddTransient<IUpdates>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Updates)
+            .AddTransient<IUpdateProcessor, UpdateProcessor>();
 
         return services;
     }
@@ -73,8 +74,8 @@ public static class ServiceCollectionsExtensions
     /// <summary>
     /// Adds an observer of an updates.
     /// </summary>
-    /// <param name="services">The DIN container.</param>
-    /// <typeparam name="TObserver">The type of of an observer.</typeparam>
+    /// <param name="services">The DI container.</param>
+    /// <typeparam name="TObserver">The type of observer.</typeparam>
     public static IServiceCollection AddYandexMessengerObserver<TObserver>(this IServiceCollection services)
         where TObserver : class, IObserver
     {

@@ -8,7 +8,7 @@ using Models.Requests;
 /// </summary>
 /// <typeparam name="TRequest">The type of request options and payload.</typeparam>
 internal abstract class MultipartStrategy<TRequest> : BaseStrategy<TRequest>
-    where TRequest : FileRequest
+    where TRequest : Request
 {
     /// <summary>
     /// Relative endpoint url.

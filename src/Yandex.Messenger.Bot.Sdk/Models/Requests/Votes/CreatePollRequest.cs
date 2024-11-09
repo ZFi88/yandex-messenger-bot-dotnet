@@ -3,18 +3,8 @@ namespace Yandex.Messenger.Bot.Sdk.Models.Requests;
 /// <summary>
 /// Represents a poll creation request data.
 /// </summary>
-public record CreatePollRequest
+public record CreatePollRequest : Request
 {
-    /// <summary>
-    /// A chat ID.
-    /// </summary>
-    public string? ChatId { get; init; }
-
-    /// <summary>
-    /// A user login.
-    /// </summary>
-    public string? Login { get; init; }
-
     /// <summary>
     /// The poll title.
     /// </summary>
@@ -31,7 +21,7 @@ public record CreatePollRequest
     public int MaxChoice { get; init; } = 1;
 
     /// <summary>
-    /// Indicates that the poll is anonynous.
+    /// Indicates that the poll is anonymous.
     /// </summary>
     public bool IsAnonymous { get; init; } = false;
 
@@ -58,5 +48,5 @@ public record CreatePollRequest
     /// <summary>
     /// Indicates that in a message that represents the poll should be disabled a preview.
     /// </summary>
-    public bool DisablePreview { get; init; } = false;
+    public bool DisableWebPagePreview { get; init; } = false;
 }

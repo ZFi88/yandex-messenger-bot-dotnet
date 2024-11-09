@@ -8,7 +8,7 @@ using Strategies;
 /// <inheritdoc cref="IUpdates"/> />
 internal class Updates : BaseClient, IUpdates
 {
-    private readonly Dictionary<string, IObserver> _observers = new();
+    private readonly UpdateProcessor _updateProcessor = new(Array.Empty<IObserver>());
     private long _offset = 0L;
 
     /// <summary>
@@ -21,32 +21,22 @@ internal class Updates : BaseClient, IUpdates
     }
 
     /// <inheritdoc/>
-    public IDictionary<string, IObserver> Observers => _observers;
-
-    /// <inheritdoc/>
     public async Task<Response> GetUpdates(GetUpdateRequest request, CancellationToken cancellationToken = default)
     {
         var payload = new GetUpdateRequestInternal()
         {
             Limit = request.Limit, Offset = _offset
         };
-        var response = await Send<GetUpdateResponse>(new SendJsonStrategy("messages/getUpdates"), payload, cancellationToken)
-            .ConfigureAwait(false);
+        var response =
+            await Send<GetUpdateResponse>(new SendJsonStrategy("messages/getUpdates"), payload, cancellationToken)
+                .ConfigureAwait(false);
 
         foreach (var update in response.Updates)
         {
-            if (_observers.TryGetValue(string.Empty, out var observer))
-            {
-                await observer.OnNewUpdate(update, cancellationToken);
-            }
-
-            if (_observers.TryGetValue(update.Text, out observer))
-            {
-                await observer.OnNewUpdate(update, cancellationToken);
-            }
+            await _updateProcessor.Process(update, cancellationToken);
         }
 
-        if (response.Updates.Any() && _observers.Any())
+        if (response.Updates.Any())
         {
             _offset = response.Updates.Max(x => x.UpdateId) + 1;
         }
@@ -55,7 +45,9 @@ internal class Updates : BaseClient, IUpdates
     }
 
     /// <inheritdoc/>
-    public async Task<SetWebhookResponse> SetWebhook(SetWebhookRequest request, CancellationToken cancellationToken = default)
+    public async Task<SetWebhookResponse> SetWebhook(
+        SetWebhookRequest request,
+        CancellationToken cancellationToken = default)
     {
         return await Send<SetWebhookResponse>(new SendJsonStrategy("self/update"), request, cancellationToken)
             .ConfigureAwait(false);
@@ -64,6 +56,6 @@ internal class Updates : BaseClient, IUpdates
     /// <inheritdoc/>
     public void Subscribe(IObserver observer)
     {
-        _observers.Add(observer.Message ?? string.Empty, observer);
+        _updateProcessor.Add(observer);
     }
 }
