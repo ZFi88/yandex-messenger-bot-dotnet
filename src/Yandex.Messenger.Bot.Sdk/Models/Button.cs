@@ -3,6 +3,11 @@ namespace Yandex.Messenger.Bot.Sdk.Models;
 /// <summary>
 /// Represents a button.
 /// </summary>
-/// <param name="Text">The button text.</param>
-/// <param name="Json">An object represents a callback data..</param>
-public record Button(string Text, ButtonData Json);
+public record Button
+{
+    /// <summary>The button text.</summary>
+    public required string Text { get; init; }
+
+    /// <summary>An object represents a callback data..</summary>
+    public ButtonData? CallbackData { get; init; }
+}
