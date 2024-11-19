@@ -9,6 +9,7 @@ using Sdk.Models;
 public class UpdateProcessorTests
 {
     private readonly Update _update;
+    private readonly Guid _buttonId = Guid.Parse("B27943C9-DED4-4E31-A381-DB23A7CF0813");
 
     public UpdateProcessorTests()
     {
@@ -16,6 +17,7 @@ public class UpdateProcessorTests
         _update = fixture.Build<Update>()
             .WithAutoProperties()
             .With(x => x.Text, "msg")
+            .With(x => x.CallbackData, new ButtonData(_buttonId))
             .Create<Update>();
     }
 
@@ -72,6 +74,40 @@ public class UpdateProcessorTests
     {
         var mockMsgObserver = new Mock<IObserver>();
         mockMsgObserver.SetupGet(x => x.Message).Returns("msg");
+
+        IEnumerable<IObserver> observers =
+        [
+            mockMsgObserver.Object
+        ];
+        var updateProcessor = new UpdateProcessor(observers);
+
+        await updateProcessor.Process(_update, CancellationToken.None);
+
+        mockMsgObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task OnNewUpdate_ButtonObservers_ShouldCallOnce()
+    {
+        var mockMsgObserver = new Mock<ButtonObserver>();
+        mockMsgObserver.SetupGet(x => x.ButtonId).Returns(_buttonId);
+
+        IEnumerable<IObserver> observers =
+        [
+            mockMsgObserver.Object
+        ];
+        var updateProcessor = new UpdateProcessor(observers);
+
+        await updateProcessor.Process(_update, CancellationToken.None);
+
+        mockMsgObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task OnNewUpdate_OneMsgAsGuidObserver_ShouldCallOnce()
+    {
+        var mockMsgObserver = new Mock<IObserver>();
+        mockMsgObserver.SetupGet(x => x.Message).Returns(_buttonId.ToString());
 
         IEnumerable<IObserver> observers =
         [

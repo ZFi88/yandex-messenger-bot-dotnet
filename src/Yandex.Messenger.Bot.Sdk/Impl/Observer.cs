@@ -4,7 +4,7 @@ using Abstractions;
 using Models;
 
 /// <inheritdoc />
-internal class Observer : IObserver
+internal sealed class Observer : IObserver
 {
     private readonly Func<Update, CancellationToken, Task> _messageHandler;
 
