@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <LangVersion>12</LangVersion>
+        <LangVersion>13</LangVersion>
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
         <NoWarn>CS1573</NoWarn>
     </PropertyGroup>
