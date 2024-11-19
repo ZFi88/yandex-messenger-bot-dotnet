@@ -31,7 +31,8 @@ internal class UpdateProcessor : IUpdateProcessor
             }
         }
 
-        if (update.CallbackData != null && _observers.TryGetValue(string.Empty, out var buttonObservers))
+        if (update.CallbackData != null &&
+            _observers.TryGetValue(update.CallbackData.Id.ToString(), out var buttonObservers))
         {
             foreach (var observer in buttonObservers)
             {

@@ -34,7 +34,9 @@ public class UpdateProcessorTests
 
         await updateProcessor.Process(_update, CancellationToken.None);
 
-        mock.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+        mock.Verify(x => x.OnNewUpdate(It.IsAny<Update>(),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(2));
     }
 
     [Fact]
@@ -57,9 +59,12 @@ public class UpdateProcessorTests
 
         await updateProcessor.Process(_update, CancellationToken.None);
 
-        mockGlobalObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()),
+        mockGlobalObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(),
+                It.IsAny<CancellationToken>()),
             Times.Exactly(2));
-        mockMsgObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+        mockMsgObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(2));
     }
 
     [Fact]
