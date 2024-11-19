@@ -1,14 +1,13 @@
 # Yandex Messenger Bot dotnet SDK
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zfi88/yandex-messenger-bot-dotnet/CI.yml?label=CI)
 
+![forks](https://img.shields.io/github/forks/zfi88/yandex-messenger-bot-dotnet.svg)
+![stars](https://img.shields.io/github/stars/zfi88/yandex-messenger-bot-dotnet.svg)
+
 ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Yandex.Messenger.Bot.Sdk?label=Yandex.Messenger.Bot.Sdk)
-![Nuget](https://img.shields.io/nuget/v/Yandex.Messenger.Bot.Sdk?label=Yandex.Messenger.Bot.Sdk)
 
 ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Yandex.Messenger.Bot.AspNetCore?label=Yandex.Messenger.AspNetCore)
-![Nuget](https://img.shields.io/nuget/v/Yandex.Messenger.Bot.AspNetCore?label=Yandex.Messenger.AspNetCore.Sdk)
 
 This repository represents dotnet wrapper for Yandex Messenger Bot API.
 The repository contains two libraries:
@@ -53,6 +52,19 @@ yandexBotClient.Updates.Subscribe("/help", async (update, token) =>
     await yandexBotClient.Chats.SendMessage(new SendMessageRequest()
     {
         Text = $"Hi, {update.From.Login}! I'm EchoBot, I'll repeat all your messages!", 
+        ChatId = update.Chat.Id
+    }, token);
+})
+```
+
+Or subscribe on button click:
+```csharp
+var guid = Guid.Parse("B27943C9-DED4-4E31-A381-DB23A7CF0813");
+yandexBotClient.Updates.Subscribe(guid, async (update, token) =>
+{
+    await yandexBotClient.Chats.SendMessage(new SendMessageRequest()
+    {
+        Text = $"Hi, {update.From.Login}! I'm EchoBot, I clicked button with id - {update.CallbackData!.Id}!", 
         ChatId = update.Chat.Id
     }, token);
 })
