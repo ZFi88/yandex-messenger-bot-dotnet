@@ -30,6 +30,15 @@ public interface IChats
     Task<SendMessageResponse> SendMessage(SendMessageRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Deletes a message from a chat.
+    /// </summary>
+    /// <param name="request">The message deleting parameters.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    Task<DeleteMessageResponse> DeleteMessage(
+        DeleteMessageRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Sends a file to a chat.
     /// </summary>
     /// <param name="request">The file sending parameters.</param>

@@ -33,6 +33,15 @@ public class EndpointTests
             },
             new object[]
             {
+                "messages/delete",
+                HttpMethod.Post,
+                (IYandexMessengerBotClient x) => x.Chats.DeleteMessage(new DeleteMessageRequest()
+                {
+                    MessageId = 100
+                }),
+            },
+            new object[]
+            {
                 "messages/createPoll",
                 HttpMethod.Post,
                 (IYandexMessengerBotClient x) => x.Polls.CreatePoll(new CreatePollRequest
