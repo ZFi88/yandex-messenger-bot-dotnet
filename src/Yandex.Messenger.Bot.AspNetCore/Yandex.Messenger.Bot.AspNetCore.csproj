@@ -1,19 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
         <IsPackable>true</IsPackable>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0'">
-        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
-        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2"/>
-    </ItemGroup>
-
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2"/>
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
