@@ -32,4 +32,18 @@ public static class UpdatesExtensions
     {
         updates.Subscribe(new Observer(msg, messageHandler));
     }
+
+    /// <summary>
+    /// Subscribes on button click.
+    /// </summary>
+    /// <param name="updates">An <see cref="IUpdates"/> object.</param>
+    /// <param name="buttonId">A button ID.</param>
+    /// <param name="messageHandler">The message handler.</param>
+    public static void Subscribe(
+        this IUpdates updates,
+        Guid buttonId,
+        Func<Update, CancellationToken, Task> messageHandler)
+    {
+        updates.Subscribe(new ButtonObserverImpl(buttonId, messageHandler));
+    }
 }
