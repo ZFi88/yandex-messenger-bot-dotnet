@@ -18,44 +18,76 @@ internal class Chats : BaseClient, IChats
     }
 
     /// <inheritdoc/>
-    public async Task<CreateChatResponse> Create(CreateChatRequest request, CancellationToken cancellationToken = default)
+    public async Task<CreateChatResponse> Create(
+        CreateChatRequest request,
+        CancellationToken cancellationToken = default)
     {
         return await Send<CreateChatResponse>(new SendJsonStrategy("chats/create"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task<ChatUpdateResponse> UpdateChat(ChatUpdateRequest request, CancellationToken cancellationToken = default)
+    public async Task<ChatUpdateResponse> UpdateChat(
+        ChatUpdateRequest request,
+        CancellationToken cancellationToken = default)
     {
         return await Send<ChatUpdateResponse>(new SendJsonStrategy("chats/updateMembers"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task<SendMessageResponse> SendMessage(SendMessageRequest request, CancellationToken cancellationToken = default)
+    public async Task<SendMessageResponse> SendMessage(
+        SendMessageRequest request,
+        CancellationToken cancellationToken = default)
     {
         return await Send<SendMessageResponse>(new SendJsonStrategy("messages/sendText"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task<SendMessageResponse> SendFile(SendFileRequest request, CancellationToken cancellationToken = default)
+    public async Task<DeleteMessageResponse> DeleteMessage(
+        DeleteMessageRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await Send<DeleteMessageResponse>(new SendJsonStrategy("messages/delete"), request, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public async Task<SendMessageResponse> SendFile(
+        SendFileRequest request,
+        CancellationToken cancellationToken = default)
     {
         return await Send<SendMessageResponse>(new SendFileStrategy(), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task<SendMessageResponse> SendImage(SendFileRequest request, CancellationToken cancellationToken = default)
+    public async Task<SendMessageResponse> SendImage(
+        SendFileRequest request,
+        CancellationToken cancellationToken = default)
     {
         return await Send<SendMessageResponse>(new SendImageStrategy(), request, cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task<SendMessageResponse> SendAlbum(SendAlbumRequest request, CancellationToken cancellationToken = default)
+    public async Task<SendMessageResponse> SendAlbum(
+        SendAlbumRequest request,
+        CancellationToken cancellationToken = default)
     {
         return await Send<SendMessageResponse>(new SendAlbumStrategy(), request, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public async Task<GetUserLinkResponse> GetUserLink(
+        GetUserLinkRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await Send<GetUserLinkResponse>(new SendJsonToQueryStringStrategy("users/getUserLink"),
+                request,
+                cancellationToken)
             .ConfigureAwait(false);
     }
 }

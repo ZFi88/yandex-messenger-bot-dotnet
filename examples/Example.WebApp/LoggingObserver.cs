@@ -1,20 +1,15 @@
-﻿using Yandex.Messenger.Bot.Sdk.Abstractions;
+﻿namespace Example.WebApp;
+
+using Yandex.Messenger.Bot.Sdk.Abstractions;
 using Yandex.Messenger.Bot.Sdk.Models;
 
-public class LoggingObserver : IObserver
+public class LoggingObserver(ILogger<LoggingObserver> logger) : IObserver
 {
-    private readonly ILogger<LoggingObserver> _logger;
-
-    public LoggingObserver(ILogger<LoggingObserver> logger)
-    {
-        _logger = logger;
-    }
-
     public string? Message => null!;
 
     public Task OnNewUpdate(Update update, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("{update}", update);
+        logger.LogInformation("{update}", update);
 
         return Task.CompletedTask;
     }

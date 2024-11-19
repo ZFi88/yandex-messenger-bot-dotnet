@@ -8,7 +8,7 @@ using Middleware;
 using Options;
 using Sdk;
 using Sdk.Abstractions;
-using Sdk.Json;
+using Sdk.Impl;
 using Sdk.Models;
 
 /// <summary>
@@ -39,7 +39,8 @@ public static class ServiceCollectionsExtensions
             })
             .AddTransient<IChats>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Chats)
             .AddTransient<IPolls>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Polls)
-            .AddTransient<IUpdates>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Updates);
+            .AddTransient<IUpdates>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Updates)
+            .AddTransient<IUpdateProcessor, UpdateProcessor>();
 
         return services;
     }
@@ -59,6 +60,23 @@ public static class ServiceCollectionsExtensions
     }
 
     /// <summary>
+    /// Adds an observer of an updates.
+    /// </summary>
+    /// <param name="services">The DI container.</param>
+    /// <param name="buttonId">An ID of a button for observing.</param>
+    /// <param name="messageHandler">A function for updates handling.</param>
+    public static IServiceCollection AddYandexButtonObserver(
+        this IServiceCollection services,
+        Guid buttonId,
+        Func<IServiceProvider, Update, CancellationToken, Task> messageHandler)
+    {
+        return services.AddTransient<IObserver>(provider =>
+            new WebhookObserver(provider,
+                buttonId.ToString(),
+                messageHandler));
+    }
+
+    /// <summary>
     /// Adds common observer which handles all updates from the Yandex Messenger Bot API.
     /// </summary>
     /// <param name="services">The DI container.</param>
@@ -67,14 +85,15 @@ public static class ServiceCollectionsExtensions
         this IServiceCollection services,
         Func<IServiceProvider, Update, CancellationToken, Task> messageHandler)
     {
-        return services.AddTransient<IObserver>(provider => new WebhookObserver(provider, string.Empty, messageHandler));
+        return services.AddTransient<IObserver>(provider =>
+            new WebhookObserver(provider, string.Empty, messageHandler));
     }
 
     /// <summary>
     /// Adds an observer of an updates.
     /// </summary>
-    /// <param name="services">The DIN container.</param>
-    /// <typeparam name="TObserver">The type of of an observer.</typeparam>
+    /// <param name="services">The DI container.</param>
+    /// <typeparam name="TObserver">The type of observer.</typeparam>
     public static IServiceCollection AddYandexMessengerObserver<TObserver>(this IServiceCollection services)
         where TObserver : class, IObserver
     {

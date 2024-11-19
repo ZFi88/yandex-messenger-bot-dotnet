@@ -5,4 +5,4 @@
 /// </summary>
 /// <param name="Ok">Indicates that the response is success.</param>
 /// <param name="Description">A description of the response.</param>
-public record Response(bool Ok, string Description);
+public abstract record Response(bool Ok, string Description);

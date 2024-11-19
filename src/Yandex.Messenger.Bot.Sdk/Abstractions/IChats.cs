@@ -30,6 +30,15 @@ public interface IChats
     Task<SendMessageResponse> SendMessage(SendMessageRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Deletes a message from a chat.
+    /// </summary>
+    /// <param name="request">The message deleting parameters.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    Task<DeleteMessageResponse> DeleteMessage(
+        DeleteMessageRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Sends a file to a chat.
     /// </summary>
     /// <param name="request">The file sending parameters.</param>
@@ -49,4 +58,11 @@ public interface IChats
     /// <param name="request">The album sending parameters.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     Task<SendMessageResponse> SendAlbum(SendAlbumRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a user chat and call links.
+    /// </summary>
+    /// <param name="request">The request parameters.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    Task<GetUserLinkResponse> GetUserLink(GetUserLinkRequest request, CancellationToken cancellationToken = default);
 }

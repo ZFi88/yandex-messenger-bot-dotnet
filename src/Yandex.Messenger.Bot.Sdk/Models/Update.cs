@@ -10,4 +10,12 @@
 /// <param name="MessageId">The message ID.</param>
 /// <param name="UpdateId">The update ID.</param>
 /// <param name="File">The file of the update.</param>
-public record Update(User From, Chat Chat, string Text, DateTime Timestamp, long MessageId, long UpdateId, File File);
+public record Update(
+    User From,
+    Chat Chat,
+    string Text,
+    DateTime Timestamp,
+    long MessageId,
+    long UpdateId,
+    File File,
+    ButtonData? CallbackData);

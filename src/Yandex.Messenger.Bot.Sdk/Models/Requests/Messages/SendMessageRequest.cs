@@ -3,18 +3,8 @@ namespace Yandex.Messenger.Bot.Sdk.Models.Requests;
 /// <summary>
 /// Represents a message sending request data.
 /// </summary>
-public record SendMessageRequest
+public record SendMessageRequest : Request
 {
-    /// <summary>
-    /// A chat ID.
-    /// </summary>
-    public string? ChatId { get; init; }
-
-    /// <summary>
-    /// A user login.
-    /// </summary>
-    public string? Login { get; init; }
-
     /// <summary>
     /// The text of the message.
     /// </summary>
@@ -43,5 +33,10 @@ public record SendMessageRequest
     /// <summary>
     /// Indicates that in the message should be disabled a preview.
     /// </summary>
-    public bool DisablePreview { get; init; } = false;
+    public bool DisableWebPagePreview { get; init; } = false;
+
+    /// <summary>
+    /// An array of inline buttons which should be shown bottom of the message.
+    /// </summary>
+    public Button[] InlineKeyboard { get; init; } = Array.Empty<Button>();
 }

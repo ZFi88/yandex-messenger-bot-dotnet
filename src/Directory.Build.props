@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <LangVersion>11</LangVersion>
+        <LangVersion>13</LangVersion>
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
         <NoWarn>CS1573</NoWarn>
     </PropertyGroup>
@@ -27,11 +27,12 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <Version>1.0.0</Version>
         <Product>Yandex.Messenger.Bot.Sdk</Product>
         <PackageTags>Yandex Messenger Bot Sdk</PackageTags>
         <Company>zfi</Company>
         <Authors>Fedor Zhekov</Authors>
-        <Copyright>Copyright ©2023 Zhekov Fedor</Copyright>
+        <Copyright>Copyright ©2024 Zhekov Fedor</Copyright>
         <PackageProjectUrl>https://github.com/ZFi88/yandex-messenger-bot-dotnet</PackageProjectUrl>
         <RepositoryUrl>https://github.com/ZFi88/yandex-messenger-bot-dotnet.git</RepositoryUrl>
         <PackageIcon>avatar.png</PackageIcon>
