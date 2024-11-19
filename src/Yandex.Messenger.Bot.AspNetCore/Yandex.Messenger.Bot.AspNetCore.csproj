@@ -18,7 +18,7 @@
         <ProjectReference Include="..\Yandex.Messenger.Bot.Sdk\Yandex.Messenger.Bot.Sdk.csproj"/>
     </ItemGroup>
 
-    <PropertyGroup>
+    <PropertyGroup>     
         <PackageId>Yandex.Messenger.Bot.AspNetCore</PackageId>
         <PackageReleaseNotes>*</PackageReleaseNotes>
         <Description>ASP.NET integration library for Yandex Messenger bots API.</Description>
