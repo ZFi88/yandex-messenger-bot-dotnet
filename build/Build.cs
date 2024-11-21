@@ -3,11 +3,11 @@ using Bimlab.Nuke.Components;
 using Nuke.Common.CI.GitHubActions;
 
 [GitHubActions("CI",
-    GitHubActionsImage.UbuntuLatest,
+    GitHubActionsImage.WindowsLatest,
     FetchDepth = 0,
     OnPushBranches = new[]
     {
-        "develop"
+        "develop", "release/*", "master"
     },
     InvokedTargets = new[]
     {
