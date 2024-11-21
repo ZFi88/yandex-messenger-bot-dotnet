@@ -40,7 +40,7 @@ partial class Build
             var sha = GetCurrentCommitSha();
             var tags = GetTagsPointsOnSha(sha);
 
-            foreach (var tag in tags)
+            foreach (var tag in GetPackableProjectTags(tags))
             {
                 Log.Information("Publishing - {tag}", tag);
                 DotNetNuGetPush(options => options

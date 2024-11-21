@@ -15,9 +15,14 @@ partial class Build
     {
         var sha = GetCurrentCommitSha();
         var tags = GetTagsPointsOnSha(sha);
+        return GetPackableProjectTags(tags).Any();
+    }
+
+    IEnumerable<string> GetPackableProjectTags(List<string> tags)
+    {
         var projectNames = string.Join('|', PackableProjects().Select(x => x.Name));
         var regex = new Regex($"({projectNames}).[0-9.devrc-]+");
-        return tags.Any(x => regex.IsMatch(x));
+        return tags.Where(x => regex.IsMatch(x));
     }
 
     List<string> GetTagsPointsOnSha(string sha)
