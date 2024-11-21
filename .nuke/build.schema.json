@@ -24,19 +24,12 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
-        "AddPublishTags",
         "Clean",
         "Compile",
-        "DeleteLocalPacks",
-        "Develop",
         "Pack",
-        "PackagesList",
-        "PackLocal",
-        "Prerelease",
         "Publish",
-        "Release",
         "Restore",
-        "Test"
+        "Tag"
       ]
     },
     "Verbosity": {
@@ -110,40 +103,19 @@
   "allOf": [
     {
       "properties": {
-        "AllPackages": {
-          "type": "boolean",
-          "description": "If true, selects all packages to build. Otherwise, you will be prompted to select packages to build"
-        },
         "Configuration": {
-          "type": "string",
-          "enum": [
-            "Debug",
-            "Release"
-          ]
-        },
-        "IgnoreFailedSources": {
-          "type": "boolean",
-          "description": "Ignore unreachable sources during Restore"
+          "type": "string"
         },
         "NugetApiKey": {
           "type": "string",
-          "description": "Nuget API key",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "NugetSource": {
-          "type": "string",
-          "description": "NuGet source URL"
-        },
-        "Packages": {
-          "type": "array",
-          "description": "Package names list",
-          "items": {
-            "type": "string"
-          }
+          "type": "string"
         },
         "Solution": {
           "type": "string",
-          "description": "Path to a solution file that is automatically loaded"
+          "description": "Path to a solution file that is automatically loaded. Default is yandex-messenger-bot-dotnet.sln"
         }
       }
     },

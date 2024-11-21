@@ -1,6 +1,9 @@
-using Bimlab.Nuke;
-using Bimlab.Nuke.Components;
+using JetBrains.Annotations;
+using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.Git;
+using Nuke.Common.IO;
+using Nuke.Common.ProjectModel;
 
 [GitHubActions("CI",
     GitHubActionsImage.WindowsLatest,
@@ -11,13 +14,17 @@ using Nuke.Common.CI.GitHubActions;
     },
     InvokedTargets = new[]
     {
-        nameof(IPublish.Publish)
+        nameof(Publish)
     },
     ImportSecrets = new[]
     {
-        "NUGET_API_KEY", "ALL_PACKAGES"
+        "NUGET_API_KEY"
     })]
-class Build : BimLabBuild, IPublish, ITest
+[PublicAPI]
+partial class Build : NukeBuild
 {
-    public static int Main() => Execute<Build>(x => x.From<ICompile>().Compile);
+    [Solution("yandex-messenger-bot-dotnet.sln")] Solution Solution;
+    [GitRepository] readonly GitRepository Repository;
+    AbsolutePath Artifacts = RootDirectory / "artifacts";
+    public static int Main() => Execute<Build>(x => x.Compile);
 }
