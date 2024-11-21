@@ -9,7 +9,7 @@ partial class Build
     Target Clean => _ => _
         .Executes(() =>
         {
-            foreach (var dir in RootDirectory.GlobDirectories("**/bin", "**/obj", "artifacts"))
+            foreach (var dir in Solution.Directory.GlobDirectories("**/bin", "**/obj", "artifacts"))
             {
                 Log.Information("Deleting - {dir}", dir);
                 dir.DeleteDirectory();
