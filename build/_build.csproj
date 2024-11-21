@@ -15,4 +15,10 @@
         <PackageReference Include="Nuke.Common" Version="9.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="..\tests\Directory.Packages.Props">
+        <Link>Directory.Build\tests\Directory.Packages.Props</Link>
+      </Content>
+    </ItemGroup>
+
 </Project>

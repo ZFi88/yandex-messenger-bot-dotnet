@@ -36,4 +36,15 @@ partial class Build
                 .SetConfiguration(Configuration)
                 .EnableNoRestore());
         });
+
+    Target Test => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(options => options
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .EnableNoRestore()
+                .EnableNoBuild());
+        });
 }

@@ -10,7 +10,7 @@ partial class Build
     Target Pack => _ => _
         .OnlyWhenDynamic(CheckTags)
         .Requires(() => Configuration)
-        .DependsOn(Compile)
+        .DependsOn(Test)
         .Executes(() =>
         {
             DotNetPack(options => options
