@@ -11,6 +11,7 @@ public record GetUpdateRequest
     public int Limit { get; init; } = 100;
 }
 
+#pragma warning disable SA1402,SA1600 // File may only contain a single type, Elements must be documented
 internal record GetUpdateRequestInternal
 {
     /// <summary>

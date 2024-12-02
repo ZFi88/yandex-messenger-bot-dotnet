@@ -6,22 +6,26 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <LangVersion>13</LangVersion>
+        <NoWarn>CS1573;NU1507</NoWarn>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="6.7.0"/>
-        <PackageReference Include="MockQueryable.Moq" Version="6.0.1" />
-        <PackageReference Include="Moq" Version="4.18.2" />
-
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-        <PackageReference Include="xunit" Version="2.4.2" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PackageReference Include="System.Net.Http"/>
+        <PackageReference Include="System.Text.RegularExpressions"/>
+        <PackageReference Include="AutoFixture"/>
+        <PackageReference Include="RichardSzalay.MockHttp"/>
+        <PackageReference Include="FluentAssertions"/>
+        <PackageReference Include="MockQueryable.Moq"/>
+        <PackageReference Include="Moq"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="xunit"/>
+        <PackageReference Include="xunit.runner.visualstudio">
             <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="3.1.2">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PackageReference Include="coverlet.collector">
             <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 

@@ -3,7 +3,9 @@ namespace Yandex.Messenger.Bot.Sdk.Impl;
 using Abstractions;
 using Models;
 
-/// <inheritdoc />
+/// <summary>
+/// Represents an <see cref="Update"/> processor.
+/// </summary>
 internal class UpdateProcessor : IUpdateProcessor
 {
     private readonly Dictionary<string, List<IObserver>> _observers = new();
@@ -40,7 +42,7 @@ internal class UpdateProcessor : IUpdateProcessor
             }
         }
 
-        if (_observers.TryGetValue(update.Text, out var msgObservers))
+        if (!string.IsNullOrEmpty(update.Text) && _observers.TryGetValue(update.Text, out var msgObservers))
         {
             foreach (var observer in msgObservers)
             {

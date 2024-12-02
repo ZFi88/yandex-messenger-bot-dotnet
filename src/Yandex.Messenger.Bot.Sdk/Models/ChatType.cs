@@ -3,7 +3,7 @@ namespace Yandex.Messenger.Bot.Sdk.Models;
 using System.Text.Json.Serialization;
 
 /// <summary>
-/// Represents a type of a chat.
+/// Represents a chat type.
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ChatType

@@ -29,7 +29,8 @@
         "Pack",
         "Publish",
         "Restore",
-        "Tag"
+        "Tag",
+        "Test"
       ]
     },
     "Verbosity": {
