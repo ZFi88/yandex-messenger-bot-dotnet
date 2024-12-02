@@ -9,14 +9,14 @@ using Models.Responses;
 public interface IUpdates : IObservable
 {
     /// <summary>
-    /// Gets an updates for a bot.
+    /// Gets updates for a bot.
     /// </summary>
     /// <param name="request">The update request parameters.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     Task<Response> GetUpdates(GetUpdateRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Set a webhook for updates handling.
+    /// Sets a webhook for updates handling.
     /// </summary>
     /// <param name="request">The webhook setting request parameters.</param>
     /// <param name="cancellationToken">A cancellation token.</param>

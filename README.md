@@ -1,4 +1,4 @@
-# Yandex Messenger Bot dotnet SDK
+# Yandex Messenger Bot .NET SDK
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zfi88/yandex-messenger-bot-dotnet/CI.yml?label=CI)
 

@@ -1,15 +1,15 @@
 ﻿namespace Yandex.Messenger.Bot.Sdk.Models;
 
 /// <summary>
-/// Represents a update.
+/// Represents a chat update data.
 /// </summary>
-/// <param name="From">A use how made the update.</param>
-/// <param name="Chat">A chat in which the update was created.</param>
-/// <param name="Text">A text of a message.</param>
-/// <param name="Timestamp">The timestamp of the update.</param>
+/// <param name="From">The user that made the update.</param>
+/// <param name="Chat">The chat the update is created in.</param>
+/// <param name="Text">The message text.</param>
+/// <param name="Timestamp">The update timestamp.</param>
 /// <param name="MessageId">The message ID.</param>
 /// <param name="UpdateId">The update ID.</param>
-/// <param name="File">The file of the update.</param>
+/// <param name="File">The attached file.</param>
 public record Update(
     User From,
     Chat Chat,

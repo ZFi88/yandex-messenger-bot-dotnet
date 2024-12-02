@@ -1,5 +1,6 @@
 ﻿namespace Yandex.Messenger.Bot.Tests;
 
+using System;
 using System.Text.Json;
 using FluentAssertions;
 using Sdk.Json;
