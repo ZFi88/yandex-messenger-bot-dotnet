@@ -42,7 +42,7 @@ internal class UpdateProcessor : IUpdateProcessor
             }
         }
 
-        if (_observers.TryGetValue(update.Text, out var msgObservers))
+        if (!string.IsNullOrEmpty(update.Text) && _observers.TryGetValue(update.Text, out var msgObservers))
         {
             foreach (var observer in msgObservers)
             {
