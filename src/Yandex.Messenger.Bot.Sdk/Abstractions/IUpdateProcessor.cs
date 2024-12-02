@@ -3,7 +3,7 @@ namespace Yandex.Messenger.Bot.Sdk.Abstractions;
 using Models;
 
 /// <summary>
-/// An abstraction which represents an update processor.
+/// Interface representing an <see cref="Update"/> processor.
 /// </summary>
 public interface IUpdateProcessor
 {
