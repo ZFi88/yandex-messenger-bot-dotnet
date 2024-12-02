@@ -27,7 +27,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>1.0.1-dev002</Version>
+        <Version>1.0.1</Version>
         <Product>Yandex.Messenger.Bot.Sdk</Product>
         <PackageTags>Yandex Messenger Bot Sdk</PackageTags>
         <Company>zfi</Company>
