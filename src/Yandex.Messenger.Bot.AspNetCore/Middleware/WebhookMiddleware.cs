@@ -8,7 +8,7 @@ using Options;
 using Sdk.Abstractions;
 using Sdk.Exceptions;
 using Sdk.Json;
-using Sdk.Models.Responses;
+using Sdk.Models;
 
 /// <summary>
 /// The middleware for handling webhooks from Yandex Messenger Bot API.
@@ -50,15 +50,12 @@ internal class WebhookMiddleware
 
         if (_endpoint.Equals(context.Request.Path.Value, StringComparison.OrdinalIgnoreCase))
         {
-            var response = await JsonSerializer.DeserializeAsync<GetUpdateResponse>(
+            var update = await JsonSerializer.DeserializeAsync<Update>(
                 context.Request.Body,
                 YandexMessengerBotJsonOptions.Value,
                 cancellationToken);
 
-            foreach (var update in response!.Updates)
-            {
-                await updateProcessor.Process(update, cancellationToken);
-            }
+            await updateProcessor.Process(update!, cancellationToken);
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
             context.Response.ContentType = "application/json";
