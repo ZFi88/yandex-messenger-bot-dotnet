@@ -10,7 +10,7 @@ using Nuke.Common.ProjectModel;
     FetchDepth = 0,
     OnPushBranches = new[]
     {
-        "develop", "release/*", "master"
+        "develop", "release/*", "master", "bugfix/*"
     },
     InvokedTargets = new[]
     {
