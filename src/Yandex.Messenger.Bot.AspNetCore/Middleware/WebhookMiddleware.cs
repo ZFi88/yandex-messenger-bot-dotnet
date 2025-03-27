@@ -11,6 +11,7 @@ using Sdk.Abstractions;
 using Sdk.Exceptions;
 using Sdk.Json;
 using Sdk.Models;
+using Sdk.Models.Responses;
 
 /// <summary>
 /// The middleware for handling webhooks from Yandex Messenger Bot API.
@@ -77,13 +78,8 @@ internal class WebhookMiddleware
             using var streamReader = new StreamReader(context.Request.Body);
             var body = await streamReader.ReadToEndAsync();
 
-            var update = JsonSerializer.Deserialize<Update>(body, YandexMessengerBotJsonOptions.Value);
-
-            if (update != null)
-            {
-                await updateProcessor.Process(update, cancellationToken);
-            }
-            else
+            if (!await TryProcessUpdates(updateProcessor, body, cancellationToken) |
+                !await TryProcessSingleUpdate(updateProcessor, body, cancellationToken))
             {
                 _logger.LogError("An error occurred in serializing webhook data. Received data:\n{body}", body);
             }
@@ -92,5 +88,41 @@ internal class WebhookMiddleware
         {
             _logger.LogCritical(e, "An error occurred during webhook processing.");
         }
+    }
+
+    private async Task<bool> TryProcessUpdates(
+        IUpdateProcessor updateProcessor,
+        string body,
+        CancellationToken cancellationToken)
+    {
+        var response = JsonSerializer.Deserialize<GetUpdateResponse>(body, YandexMessengerBotJsonOptions.Value);
+
+        if (response == null)
+        {
+            return false;
+        }
+
+        foreach (var update in response.Updates)
+        {
+            await updateProcessor.Process(update, cancellationToken);
+        }
+
+        return true;
+    }
+
+    private async Task<bool> TryProcessSingleUpdate(
+        IUpdateProcessor updateProcessor,
+        string body,
+        CancellationToken cancellationToken)
+    {
+        var update = JsonSerializer.Deserialize<Update>(body, YandexMessengerBotJsonOptions.Value);
+
+        if (update == null)
+        {
+            return false;
+        }
+
+        await updateProcessor.Process(update, cancellationToken);
+        return true;
     }
 }
