@@ -7,7 +7,6 @@ using Nuke.Common.ProjectModel;
 
 [GitHubActions("CI",
     GitHubActionsImage.WindowsLatest,
-    GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPushBranches = new[]
     {
