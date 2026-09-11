@@ -141,5 +141,6 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 - **scope** (optional): area of change, e.g. `webhook-middleware`, `sdk`, `aspnetcore`, `build`
 - **description**: short summary after the colon and space; do not end with a period
 - Breaking changes: `!` after type/scope (e.g. `feat(sdk)!: ...`) and/or a `BREAKING CHANGE:` footer
+- Language: write commit messages (subject and body) in English
 
 Examples from this repo: `fix(webhook-middleware): Added serialization fallback`, `build: Added Test target`, `chore: Updated packages`.
