@@ -78,7 +78,7 @@ internal class WebhookMiddleware
             using var streamReader = new StreamReader(context.Request.Body);
             var body = await streamReader.ReadToEndAsync();
 
-            if (!await TryProcessUpdates(updateProcessor, body, cancellationToken) |
+            if (!await TryProcessUpdates(updateProcessor, body, cancellationToken) &&
                 !await TryProcessSingleUpdate(updateProcessor, body, cancellationToken))
             {
                 _logger.LogError("An error occurred in serializing webhook data. Received data:\n{body}", body);
@@ -102,12 +102,16 @@ internal class WebhookMiddleware
             return false;
         }
 
-        foreach (var update in response.Updates)
+        // A batch payload carries the "updates" field; a single Update does not.
+        // When the field is absent Updates is null and the body must be handled
+        // by the single-update path instead of failing with a null reference.
+        var isBatch = response.Updates != null;
+        foreach (var update in response.Updates ?? Array.Empty<Update>())
         {
             await updateProcessor.Process(update, cancellationToken);
         }
 
-        return true;
+        return isBatch;
     }
 
     private async Task<bool> TryProcessSingleUpdate(
