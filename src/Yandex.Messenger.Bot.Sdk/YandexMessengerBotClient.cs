@@ -13,6 +13,7 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
     public const string YandexMessengerBotApiBaseAddress = "https://botapi.messenger.yandex.net/bot/v1/";
 
     private readonly HttpClient _httpClient;
+    private readonly bool _ownsHttpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="YandexMessengerBotClient"/> class.
@@ -25,6 +26,7 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
             BaseAddress = new Uri(YandexMessengerBotApiBaseAddress),
         };
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", token);
+        _ownsHttpClient = true;
         Init();
     }
 
@@ -35,6 +37,7 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
     public YandexMessengerBotClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
+        _ownsHttpClient = false;
         Init();
     }
 
@@ -50,7 +53,10 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
     /// <inheritdoc />
     public void Dispose()
     {
-        _httpClient.Dispose();
+        if (_ownsHttpClient)
+        {
+            _httpClient.Dispose();
+        }
     }
 
     private void Init()

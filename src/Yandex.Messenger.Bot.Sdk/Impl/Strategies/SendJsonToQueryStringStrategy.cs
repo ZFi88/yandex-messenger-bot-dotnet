@@ -1,15 +1,17 @@
 ﻿namespace Yandex.Messenger.Bot.Sdk.Impl.Strategies;
 
-using System.Web;
+using System.Collections.Concurrent;
+using System.Reflection;
 using Extensions;
 
 /// <inheritdoc />
 internal class SendJsonToQueryStringStrategy : ISendStrategy
 {
+    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertiesCache = new();
     private readonly string _endpoint;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SendJsonStrategy"/> class.
+    /// Initializes a new instance of the <see cref="SendJsonToQueryStringStrategy"/> class.
     /// </summary>
     /// <param name="endpoint">An endpoint relative url.</param>
     public SendJsonToQueryStringStrategy(string endpoint)
@@ -20,11 +22,18 @@ internal class SendJsonToQueryStringStrategy : ISendStrategy
     /// <inheritdoc/>
     public HttpRequestMessage CreateRequest(object payload)
     {
-        var properties = payload.GetType()
-            .GetProperties()
-            .Where(p => p.GetValue(payload, null) != null)
-            .Select(p => $"{p.Name.ToSnakeCase()}={HttpUtility.UrlEncode(p.GetValue(payload, null).ToString())}");
-        var queryString = string.Join("&", properties.ToArray());
+        var properties = PropertiesCache.GetOrAdd(payload.GetType(), type => type.GetProperties());
+        var parts = new List<string>(properties.Length);
+        foreach (var property in properties)
+        {
+            var value = property.GetValue(payload);
+            if (value is not null)
+            {
+                parts.Add($"{property.Name.ToSnakeCase()}={Uri.EscapeDataString(value.ToString())}");
+            }
+        }
+
+        var queryString = string.Join("&", parts);
 
         return new HttpRequestMessage(HttpMethod.Get, $"{_endpoint}?{queryString}");
     }
