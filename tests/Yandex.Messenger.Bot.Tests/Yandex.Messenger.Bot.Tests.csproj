@@ -2,6 +2,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Yandex.Messenger.Bot.Sdk\Yandex.Messenger.Bot.Sdk.csproj"/>
+        <ProjectReference Include="..\..\src\Yandex.Messenger.Bot.AspNetCore\Yandex.Messenger.Bot.AspNetCore.csproj"/>
     </ItemGroup>
 
 </Project>
