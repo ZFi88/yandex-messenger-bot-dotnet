@@ -14,7 +14,7 @@ public abstract class ButtonObserver : IObserver
     public abstract Guid? ButtonId { get; protected init; }
 
     /// <inheritdoc />
-    public string? Message => ButtonId?.ToString() ?? Guid.Empty.ToString();
+    public string? Message => ButtonId?.ToString();
 
     /// <inheritdoc />
     public abstract Task OnNewUpdate(Update update, CancellationToken cancellationToken);

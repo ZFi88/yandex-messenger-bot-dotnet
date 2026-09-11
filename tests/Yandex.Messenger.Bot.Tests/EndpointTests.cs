@@ -1,11 +1,11 @@
-﻿namespace Yandex.Messenger.Bot.Tests;
+namespace Yandex.Messenger.Bot.Tests;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using RichardSzalay.MockHttp;
 using Sdk;
 using Sdk.Abstractions;
@@ -13,6 +13,10 @@ using Sdk.Models.Requests;
 
 public class EndpointTests
 {
+    private const string DefaultResponseBody = """{"ok":true,"description":""}""";
+
+    private const string GetUpdatesResponseBody = """{"ok":true,"description":"","updates":[]}""";
+
     public static IEnumerable<object[]> Data()
     {
         return new List<object[]>()
@@ -25,7 +29,8 @@ public class EndpointTests
                 {
                     Name = "Name",
                     Description = "Description"
-                })
+                }),
+                DefaultResponseBody
             },
             new object[]
             {
@@ -35,6 +40,7 @@ public class EndpointTests
                 {
                     Text = "Text"
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -44,6 +50,7 @@ public class EndpointTests
                 {
                     MessageId = 100
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -56,6 +63,7 @@ public class EndpointTests
                     {
                     }
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -65,6 +73,7 @@ public class EndpointTests
                 {
                     MessageId = 100,
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -75,12 +84,14 @@ public class EndpointTests
                     MessageId = 1000,
                     AnswerId = 100
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
                 "messages/getUpdates",
                 HttpMethod.Post,
                 (IYandexMessengerBotClient x) => x.Updates.GetUpdates(new GetUpdateRequest()),
+                GetUpdatesResponseBody,
             },
             new object[]
             {
@@ -90,6 +101,7 @@ public class EndpointTests
                 {
                     WebhookUrl = "WebhookUrl"
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -101,6 +113,7 @@ public class EndpointTests
                     Filename = "Filename",
                     Document = new MemoryStream()
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -112,6 +125,7 @@ public class EndpointTests
                     Filename = "Filename",
                     Document = new MemoryStream()
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -122,6 +136,7 @@ public class EndpointTests
                     ChatId = "ChatId",
                     Images = new Dictionary<string, Stream>() { { "null", new MemoryStream() } }
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -131,6 +146,7 @@ public class EndpointTests
                 {
                     ChatId = "ChatId"
                 }),
+                DefaultResponseBody,
             },
             new object[]
             {
@@ -140,6 +156,7 @@ public class EndpointTests
                 {
                     Login = "Login"
                 }),
+                DefaultResponseBody,
             },
         };
     }
@@ -149,26 +166,20 @@ public class EndpointTests
     public async Task SdkMethodsShouldCallCorrectEndpoints(
         string url,
         HttpMethod method,
-        Func<IYandexMessengerBotClient, Task> action)
+        Func<IYandexMessengerBotClient, Task> action,
+        string responseBody)
     {
         using var mockHttp = new MockHttpMessageHandler();
 
         url = $"{YandexMessengerBotClient.YandexMessengerBotApiBaseAddress}{url}";
 
-        mockHttp.Expect(method, url).Respond(HttpStatusCode.OK);
+        mockHttp.Expect(method, url).Respond("application/json", responseBody);
         var httpClient = mockHttp.ToHttpClient();
         httpClient.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
 
         var botClient = new YandexMessengerBotClient(httpClient);
 
-        try
-        {
-            await action(botClient);
-        }
-        catch
-        {
-            // ignore
-        }
+        await action(botClient);
 
         mockHttp.VerifyNoOutstandingExpectation();
     }
@@ -180,21 +191,40 @@ public class EndpointTests
 
         var url = $"{YandexMessengerBotClient.YandexMessengerBotApiBaseAddress}users/getUserLink";
 
-        mockHttp.Expect(HttpMethod.Get, url).WithQueryString("login", "test").Respond(HttpStatusCode.OK);
+        mockHttp.Expect(HttpMethod.Get, url).WithQueryString("login", "test").Respond("application/json", DefaultResponseBody);
         var httpClient = mockHttp.ToHttpClient();
         httpClient.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
 
         var botClient = new YandexMessengerBotClient(httpClient);
 
-        try
-        {
-            await botClient.Chats.GetUserLink(new GetUserLinkRequest() { Login = "test" });
-        }
-        catch
-        {
-            // ignore
-        }
+        await botClient.Chats.GetUserLink(new GetUserLinkRequest() { Login = "test" });
 
         mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
+    public async Task SendFile_WithInvalidChatIdLoginCombination_ShouldThrowArgumentException(
+        bool setChatId,
+        bool setLogin)
+    {
+        using var mockHttp = new MockHttpMessageHandler();
+        var httpClient = mockHttp.ToHttpClient();
+        httpClient.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
+
+        var botClient = new YandexMessengerBotClient(httpClient);
+
+        var request = new SendFileRequest
+        {
+            Filename = "test.txt",
+            Document = new MemoryStream(),
+            ChatId = setChatId ? "chatId" : null,
+            Login = setLogin ? "login" : null
+        };
+
+        Func<Task> act = async () => await botClient.Chats.SendFile(request);
+
+        await act.Should().ThrowAsync<ArgumentException>().WithMessage("Either ChatId or Login must be set");
     }
 }
