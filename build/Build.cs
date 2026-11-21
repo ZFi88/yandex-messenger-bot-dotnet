@@ -1,9 +1,8 @@
-using JetBrains.Annotations;
-using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Solutions;
 
 [GitHubActions("CI",
     GitHubActionsImage.WindowsLatest,
@@ -20,8 +19,7 @@ using Nuke.Common.ProjectModel;
     {
         "NUGET_API_KEY"
     })]
-[PublicAPI]
-partial class Build : NukeBuild
+partial class Build : FalloutBuild
 {
     [Solution("yandex-messenger-bot-dotnet.sln")] Solution Solution;
     [GitRepository] readonly GitRepository Repository;

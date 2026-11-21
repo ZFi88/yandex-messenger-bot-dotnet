@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tools.Git;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.Tools.Git;
+using Fallout.Solutions;
 
 partial class Build
 {

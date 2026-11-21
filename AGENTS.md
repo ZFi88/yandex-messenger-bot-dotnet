@@ -9,7 +9,7 @@ This file provides guidance to AI agents when working with code in this reposito
 - **Yandex.Messenger.Bot.Sdk** — HTTP client, models, and update observer abstractions covering the Bot API
 - **Yandex.Messenger.Bot.AspNetCore** — DI registration and webhook middleware for ASP.NET Core
 
-SDK target: `netstandard2.0` (C# 13). Tests and examples: `net9.0`. SDK version is pinned in `global.json` (`9.0.100`).
+SDK target: `netstandard2.0` (C# 13). Tests and examples: `net9.0`. The .NET SDK version is pinned in `global.json` (`10.0.100`, `rollForward: latestFeature`); the build project itself targets `net10.0`.
 
 ## Tooling: roslyn-mcp first
 
@@ -58,7 +58,7 @@ roslyn-mcp was unavailable and which fallback was used.
 
 ## Commands
 
-Build orchestration is **Nuke** (default configuration: `Release`). Prefer the wrapper scripts over invoking Nuke directly.
+Build orchestration is **Fallout** (default configuration: `Release`) — the successor to NUKE. Prefer the wrapper scripts over invoking the tool directly. The CLI is pinned in `.config/dotnet-tools.json`; run `dotnet tool restore` once after cloning.
 
 ```bash
 ./build.sh              # default target: Compile (Clean → Restore → Compile)
@@ -71,11 +71,14 @@ Build orchestration is **Nuke** (default configuration: `Release`). Prefer the w
 ./build.sh Tag           # creates tags {ProjectName}.{Version} for packable projects
 
 # Windows equivalents: build.cmd / build.ps1
+
+# Direct invocation (after `dotnet tool restore`)
+dotnet fallout Test
 ```
 
 Override configuration: `./build.sh Compile --configuration Debug`
 
-Day-to-day `dotnet` workflows (without full Nuke Clean):
+Day-to-day `dotnet` workflows (without full Fallout Clean):
 
 ```bash
 dotnet restore yandex-messenger-bot-dotnet.sln
@@ -93,7 +96,7 @@ dotnet run --project examples/Example.WebApp
 
 There is no separate lint target. StyleCop.Analyzers run on build for `src/` via `stylecop.ruleset`; XML docs are generated; Release treats warnings as errors (`TreatWarningsAsErrors`).
 
-CI (`.github/workflows/CI.yml`, generated from Nuke `[GitHubActions]`): on push to `develop`, `master`, `release/*`, `bugfix/*` runs `./build.cmd Publish` on `windows-latest` with `NUGET_API_KEY`. Publish is a no-op unless version tags point at the current commit.
+CI (`.github/workflows/CI.yml`, generated from Fallout `[GitHubActions]`): on push to `develop`, `master`, `release/*`, `bugfix/*` runs `dotnet fallout Publish` on `windows-latest` with `NUGET_API_KEY`. Publish is a no-op unless version tags point at the current commit.
 
 Package versions are centralized: `src/Directory.Packages.props`, `tests/Directory.Packages.props`. Package metadata / version (`1.0.2` currently) live in `src/Directory.Build.props`.
 
@@ -108,7 +111,7 @@ Package versions are centralized: `src/Directory.Packages.props`, `tests/Directo
 | `tests/Yandex.Messenger.Bot.Tests` | xunit + Moq + MockHttp + FluentAssertions + AutoFixture |
 | `examples/Example.Console` | Long-poll echo bot |
 | `examples/Example.WebApp` | Webhook + DI observers |
-| `build/` | Nuke build project (`_build.csproj`) |
+| `build/` | Fallout build project (`_build.csproj`) |
 
 Internals of the Sdk are visible to AspNetCore, Tests, and Moq (`InternalsVisibleTo` in the Sdk csproj).
 
