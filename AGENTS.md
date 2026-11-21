@@ -96,9 +96,9 @@ dotnet run --project examples/Example.WebApp
 
 There is no separate lint target. StyleCop.Analyzers run on build for `src/` via `stylecop.ruleset`; XML docs are generated; Release treats warnings as errors (`TreatWarningsAsErrors`).
 
-CI (`.github/workflows/CI.yml`, generated from Fallout `[GitHubActions]`): on push to `develop`, `master`, `release/*`, `bugfix/*` runs `dotnet fallout Publish` on `windows-latest` with `NUGET_API_KEY`. Publish is a no-op unless version tags point at the current commit.
+CI (`.github/workflows/CI.yml`, generated from Fallout `[GitHubActions]`): on push to `develop`, `master`, `release/*`, `bugfix/*` runs `dotnet fallout Publish` on `windows-latest` with `NUGET_API_KEY`. Publish is a no-op unless version tags point at the current commit. Feature branches are covered by a separate generated workflow `.github/workflows/CI-Feature.yml` (push to `feature/*`), which runs `dotnet fallout Test`.
 
-Package versions are centralized: `src/Directory.Packages.props`, `tests/Directory.Packages.props`. Package metadata / version (`1.0.2` currently) live in `src/Directory.Build.props`.
+Package versions are centralized: `src/Directory.Packages.props`, `tests/Directory.Packages.props`. Package metadata / version (`2.0.0` currently) live in `src/Directory.Build.props`.
 
 ## Architecture
 

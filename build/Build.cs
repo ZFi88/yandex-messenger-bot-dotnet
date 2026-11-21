@@ -19,6 +19,17 @@ using Fallout.Solutions;
     {
         "NUGET_API_KEY"
     })]
+[GitHubActions("CI-Feature",
+    GitHubActionsImage.WindowsLatest,
+    FetchDepth = 0,
+    OnPushBranches = new[]
+    {
+        "feature/*"
+    },
+    InvokedTargets = new[]
+    {
+        nameof(Test)
+    })]
 partial class Build : FalloutBuild
 {
     [Solution("yandex-messenger-bot-dotnet.sln")] Solution Solution;
