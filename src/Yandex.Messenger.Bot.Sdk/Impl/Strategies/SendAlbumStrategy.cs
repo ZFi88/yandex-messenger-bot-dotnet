@@ -12,12 +12,13 @@ internal class SendAlbumStrategy : MultipartStrategy<SendAlbumRequest>
     protected override string FilePartName => "images";
 
     /// <inheritdoc/>
-    protected override HttpRequestMessage CreateRequestInner(SendAlbumRequest sendFileRequest)
+    protected override HttpRequestMessage CreateRequestInner(SendAlbumRequest sendAlbumRequest)
     {
-        var request = base.CreateRequestInner(sendFileRequest);
+        var request = base.CreateRequestInner(sendAlbumRequest);
 
         var content = (MultipartFormDataContent)request.Content!;
-        foreach (var kv in sendFileRequest.Images)
+        MultipartContentBuilder.AddString(content, "text", sendAlbumRequest.Text);
+        foreach (var kv in sendAlbumRequest.Images)
         {
             var streamContent = new StreamContent(kv.Value);
             content.Add(streamContent, FilePartName, kv.Key);

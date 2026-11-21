@@ -1,7 +1,7 @@
 namespace Yandex.Messenger.Bot.Sdk.Models.Requests;
 
 /// <inheritdoc />
-public record SendFileRequest : Request
+public record SendFileRequest : SendRequest
 {
     /// <summary>
     /// A file name.

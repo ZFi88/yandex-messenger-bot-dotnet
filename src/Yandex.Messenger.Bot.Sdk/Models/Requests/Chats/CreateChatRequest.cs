@@ -45,4 +45,9 @@ public record CreateChatRequest
     /// Should be empty if chat creating(Channel=false).
     /// </remarks>
     public User[]? Subscribers { get; init; }
+
+    /// <summary>
+    /// Indicates that a public chat with an invite link should be created.
+    /// </summary>
+    public bool? Public { get; init; }
 }
