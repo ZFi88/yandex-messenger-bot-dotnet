@@ -15,9 +15,24 @@ using Fallout.Solutions;
     {
         nameof(Publish)
     },
-    ImportSecrets = new[]
+    ReadPermissions = new[]
     {
-        "NUGET_API_KEY"
+        GitHubActionsPermissions.Contents
+    },
+    WritePermissions = new[]
+    {
+        GitHubActionsPermissions.IdToken
+    })]
+[GitHubActions("CI-Feature",
+    GitHubActionsImage.WindowsLatest,
+    FetchDepth = 0,
+    OnPushBranches = new[]
+    {
+        "feature/*"
+    },
+    InvokedTargets = new[]
+    {
+        nameof(Test)
     })]
 partial class Build : FalloutBuild
 {

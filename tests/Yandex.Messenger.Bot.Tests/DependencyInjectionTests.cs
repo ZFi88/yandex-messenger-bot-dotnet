@@ -19,6 +19,8 @@ public class DependencyInjectionTests
 
         provider.GetRequiredService<IYandexMessengerBotClient>().Should().NotBeNull();
         provider.GetRequiredService<IChats>().Should().NotBeNull();
+        provider.GetRequiredService<IMessages>().Should().NotBeNull();
+        provider.GetRequiredService<IBot>().Should().NotBeNull();
         provider.GetRequiredService<IPolls>().Should().NotBeNull();
         provider.GetRequiredService<IUpdates>().Should().NotBeNull();
         provider.GetRequiredService<IUpdateProcessor>().Should().NotBeNull();

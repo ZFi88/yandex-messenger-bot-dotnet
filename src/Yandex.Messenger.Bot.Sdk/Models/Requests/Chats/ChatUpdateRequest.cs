@@ -29,4 +29,9 @@ public record ChatUpdateRequest
     /// Array of users which should be deleted from the chat.
     /// </summary>
     public User[] Remove { get; init; } = Array.Empty<User>();
+
+    /// <summary>
+    /// Indicates that chat members should receive system notifications about the members change.
+    /// </summary>
+    public bool SendMembersUpdatedNotifications { get; init; }
 }

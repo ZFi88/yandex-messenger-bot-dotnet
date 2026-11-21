@@ -5,5 +5,5 @@
 /// <param name="VotedCount"></param>
 /// <param name="Cursor"></param>
 /// <param name="Votes"></param>
-public record GetVotersResponse(bool Ok, string Description, int AnswerId, int VotedCount, int Cursor, Vote[] Votes)
+public record GetVotersResponse(bool Ok, string Description, int AnswerId, int VotedCount, VotersCursor Cursor, Vote[] Votes)
     : Response(Ok, Description);
