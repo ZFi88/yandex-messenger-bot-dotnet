@@ -22,7 +22,7 @@ internal class Messages : BaseClient, IMessages
         SendTypingRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await Send<SimpleResponse>(new SendJsonStrategy("messages/sendTyping"), request, cancellationToken)
+        return await SendSimple(new SendJsonStrategy("messages/sendTyping"), request, cancellationToken)
             .ConfigureAwait(false);
     }
 

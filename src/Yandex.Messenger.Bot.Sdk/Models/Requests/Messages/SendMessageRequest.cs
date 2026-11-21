@@ -25,6 +25,8 @@ public record SendMessageRequest : SendRequest
     /// </summary>
     /// <remarks>
     /// Deprecated by the API. Use <see cref="SendRequest.SuggestButtons"/> instead.
+    /// The API rejects a request which contains both this property and <see cref="SendRequest.SuggestButtons"/>,
+    /// so the property is omitted from the payload unless it is set explicitly.
     /// </remarks>
-    public Button[] InlineKeyboard { get; init; } = Array.Empty<Button>();
+    public Button[]? InlineKeyboard { get; init; }
 }

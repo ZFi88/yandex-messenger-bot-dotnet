@@ -1,6 +1,7 @@
 namespace Yandex.Messenger.Bot.Sdk.Impl.Strategies;
 
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using Json;
 
@@ -36,7 +37,7 @@ internal static class MultipartContentBuilder
         if (value is not null)
         {
             var json = JsonSerializer.Serialize(value, YandexMessengerBotJsonOptions.Value);
-            content.Add(new StringContent(json), name);
+            content.Add(new StringContent(json, Encoding.UTF8, "application/json"), name);
         }
     }
 }

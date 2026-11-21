@@ -61,6 +61,45 @@ internal abstract class BaseClient
     }
 
     /// <summary>
+    /// Sends a request to Yandex Messenger Bot API endpoints which may answer with an empty body.
+    /// </summary>
+    /// <param name="strategy">The http request creation strategy.</param>
+    /// <param name="payload">The http request payload.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>The response. An empty body is treated as a successful operation.</returns>
+    protected async Task<Response> SendSimple(
+        ISendStrategy strategy,
+        object payload,
+        CancellationToken cancellationToken)
+    {
+        using var request = strategy.CreateRequest(payload);
+        using var response = await _client
+            .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
+            .ConfigureAwait(false);
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            throw new BotException(
+                $"Yandex Messenger Bot API returned status code {(int)response.StatusCode} {response.StatusCode}. Response body: {errorBody}");
+        }
+
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            return new SimpleResponse(true, string.Empty);
+        }
+
+        var data = JsonSerializer.Deserialize<SimpleResponse>(body, _options);
+        if (data is not { Ok: true })
+        {
+            throw new BotException(data?.Description);
+        }
+
+        return data;
+    }
+
+    /// <summary>
     /// Sends a request to Yandex Messenger Bot API and returns the raw response content stream.
     /// </summary>
     /// <param name="strategy">The http request creation strategy.</param>

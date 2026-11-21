@@ -23,7 +23,7 @@ public record GetVotersRequest : Request
     /// <summary>
     /// The ID of vote from which should gets voters.
     /// </summary>
-    public int Cursor { get; init; } = 0;
+    public long Cursor { get; init; } = 0;
 
     /// <summary>
     /// The ID of the answer for getting voters.

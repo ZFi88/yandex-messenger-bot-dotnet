@@ -8,5 +8,5 @@ public record DeleteMessageRequest : Request
     /// <summary>
     /// A message ID.
     /// </summary>
-    public required int MessageId { get; init; }
+    public required long MessageId { get; init; }
 }

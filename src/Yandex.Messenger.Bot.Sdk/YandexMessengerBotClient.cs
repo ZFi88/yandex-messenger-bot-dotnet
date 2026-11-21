@@ -26,6 +26,7 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
             BaseAddress = new Uri(YandexMessengerBotApiBaseAddress),
         };
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", token);
+        SetDefaultUserAgent(_httpClient);
         _ownsHttpClient = true;
         Init();
     }
@@ -65,8 +66,22 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
         }
     }
 
+    private static void SetDefaultUserAgent(HttpClient httpClient)
+    {
+        if (!httpClient.DefaultRequestHeaders.UserAgent.Any())
+        {
+            httpClient.DefaultRequestHeaders.UserAgent.Add(
+                new ProductInfoHeaderValue("YandexMessengerBotSdk", "2.0.0"));
+        }
+    }
+
+    /// <summary>
+    /// The Bot API rejects some endpoints, e.g. <c>messages/getFile</c>, with HTTP 500 when the request
+    /// has no User-Agent header, so a default one is set unless the caller already provided it.
+    /// </summary>
     private void Init()
     {
+        SetDefaultUserAgent(_httpClient);
         Chats = new Chats(_httpClient);
         Messages = new Messages(_httpClient);
         Bot = new Bot(_httpClient);

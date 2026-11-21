@@ -3,6 +3,7 @@ namespace Yandex.Messenger.Bot.Tests;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -63,27 +64,6 @@ public class EndpointTests
                     Answers = new string[]
                     {
                     }
-                }),
-                DefaultResponseBody,
-            },
-            new object[]
-            {
-                "polls/getResults",
-                HttpMethod.Get,
-                (IYandexMessengerBotClient x) => x.Polls.GetPollResults(new PollResultsRequest
-                {
-                    MessageId = 100,
-                }),
-                DefaultResponseBody,
-            },
-            new object[]
-            {
-                "polls/getVoters",
-                HttpMethod.Get,
-                (IYandexMessengerBotClient x) => x.Polls.GetVoters(new GetVotersRequest
-                {
-                    MessageId = 1000,
-                    AnswerId = 100
                 }),
                 DefaultResponseBody,
             },
@@ -349,6 +329,85 @@ public class EndpointTests
 
         await botClient.Chats.GetUserLink(new GetUserLinkRequest() { Login = "test" });
 
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task GetPollResults_ShouldPassParametersInQueryString()
+    {
+        using var mockHttp = new MockHttpMessageHandler();
+
+        var url = $"{YandexMessengerBotClient.YandexMessengerBotApiBaseAddress}polls/getResults";
+
+        mockHttp.Expect(HttpMethod.Get, url)
+            .WithQueryString("message_id", "100")
+            .Respond(
+                "application/json",
+                """{"ok":true,"description":"","answers":{"0":1},"voted_count":1}""");
+        var httpClient = mockHttp.ToHttpClient();
+        httpClient.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
+
+        var botClient = new YandexMessengerBotClient(httpClient);
+
+        var response = await botClient.Polls.GetPollResults(new PollResultsRequest { MessageId = 100 });
+
+        response.VotedCount.Should().Be(1);
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task GetVoters_ShouldPassParametersInQueryString()
+    {
+        using var mockHttp = new MockHttpMessageHandler();
+
+        var url = $"{YandexMessengerBotClient.YandexMessengerBotApiBaseAddress}polls/getVoters";
+
+        mockHttp.Expect(HttpMethod.Get, url)
+            .WithQueryString(new Dictionary<string, string>
+            {
+                ["message_id"] = "1000",
+                ["answer_id"] = "2",
+                ["limit"] = "50",
+                ["cursor"] = "10",
+            })
+            .Respond(
+                "application/json",
+                """{"ok":true,"description":"","answer_id":2,"voted_count":1,"cursor":{"next":10},"votes":[]}""");
+        var httpClient = mockHttp.ToHttpClient();
+        httpClient.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
+
+        var botClient = new YandexMessengerBotClient(httpClient);
+
+        var response = await botClient.Polls.GetVoters(new GetVotersRequest
+        {
+            MessageId = 1000,
+            AnswerId = 2,
+            Limit = 50,
+            Cursor = 10,
+        });
+
+        response.AnswerId.Should().Be(2);
+        response.Cursor!.Next.Should().Be(10);
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task SendTyping_ShouldAcceptEmptyResponseBody()
+    {
+        using var mockHttp = new MockHttpMessageHandler();
+
+        var url = $"{YandexMessengerBotClient.YandexMessengerBotApiBaseAddress}messages/sendTyping";
+
+        mockHttp.Expect(HttpMethod.Post, url)
+            .Respond(HttpStatusCode.OK, "application/json", string.Empty);
+        var httpClient = mockHttp.ToHttpClient();
+        httpClient.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
+
+        var botClient = new YandexMessengerBotClient(httpClient);
+
+        var response = await botClient.Messages.SendTyping(new SendTypingRequest { ChatId = "chat-id" });
+
+        response.Ok.Should().BeTrue();
         mockHttp.VerifyNoOutstandingExpectation();
     }
 

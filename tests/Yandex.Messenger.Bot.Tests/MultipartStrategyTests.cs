@@ -58,7 +58,7 @@ public class MultipartStrategyTests
             ReplyQuote = "quote",
             DisableNotification = true,
             Important = true,
-            Forwards = [new Forward("source-chat", [1, 2])],
+            Forwards = [new Forward("source-chat", 2)],
             SuggestButtons = new SuggestButtons
             {
                 Layout = "false",
@@ -88,7 +88,7 @@ public class MultipartStrategyTests
 
         using var forwards = JsonDocument.Parse(fields["forwards"]);
         forwards.RootElement[0].GetProperty("chat_id").GetString().Should().Be("source-chat");
-        forwards.RootElement[0].GetProperty("message_ids")[1].GetInt64().Should().Be(2);
+        forwards.RootElement[0].GetProperty("message_id").GetInt64().Should().Be(2);
 
         using var suggestButtons = JsonDocument.Parse(fields["suggest_buttons"]);
         suggestButtons.RootElement.GetProperty("layout").GetString().Should().Be("false");
@@ -100,6 +100,11 @@ public class MultipartStrategyTests
         var directive = actionButton.GetProperty("directives")[0];
         directive.GetProperty("type").GetString().Should().Be("server_action");
         directive.GetProperty("name").GetString().Should().Be("like");
+
+        var contentTypes = ReadContentTypes(message);
+        contentTypes["forwards"].Should().Be("application/json");
+        contentTypes["suggest_buttons"].Should().Be("application/json");
+        contentTypes["action_buttons"].Should().Be("application/json");
     }
 
     [Fact]
@@ -118,6 +123,14 @@ public class MultipartStrategyTests
 
         fields["chat_id"].Should().Be("chat");
         fields["text"].Should().Be("caption");
+    }
+
+    private static Dictionary<string, string?> ReadContentTypes(HttpRequestMessage message)
+    {
+        var multipart = (MultipartFormDataContent)message.Content!;
+        return multipart.ToDictionary(
+            part => part.Headers.ContentDisposition?.Name?.Trim('"') ?? string.Empty,
+            part => part.Headers.ContentType?.MediaType);
     }
 
     private static async Task<Dictionary<string, string>> ReadFields(HttpRequestMessage message)

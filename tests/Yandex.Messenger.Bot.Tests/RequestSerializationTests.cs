@@ -56,6 +56,35 @@ public class RequestSerializationTests
     }
 
     [Fact]
+    public void SendMessageRequest_ShouldOmitInlineKeyboardByDefault()
+    {
+        var request = new SendMessageRequest
+        {
+            Text = "text",
+        };
+
+        using var document = Serialize(request);
+
+        document.RootElement.TryGetProperty("inline_keyboard", out _).Should().BeFalse();
+    }
+
+    [Fact]
+    public void SendMessageRequest_ShouldSerializeInlineKeyboardWhenSet()
+    {
+        var request = new SendMessageRequest
+        {
+            Text = "text",
+            InlineKeyboard = [new Button { Text = "Open" }],
+        };
+
+        using var document = Serialize(request);
+
+        var buttons = document.RootElement.GetProperty("inline_keyboard");
+        buttons.GetArrayLength().Should().Be(1);
+        buttons[0].GetProperty("text").GetString().Should().Be("Open");
+    }
+
+    [Fact]
     public void User_ShouldSerializeOnlyLogin()
     {
         using var document = Serialize(new User("ivan_ivanov"));
@@ -70,7 +99,7 @@ public class RequestSerializationTests
         var request = new SendMessageRequest
         {
             Text = "text",
-            Forwards = [new Forward("source-chat", [1, 2])],
+            Forwards = [new Forward("source-chat", 42)],
             SuggestButtons = new SuggestButtons
             {
                 Layout = "true",
@@ -108,7 +137,7 @@ public class RequestSerializationTests
 
         var forwards = document.RootElement.GetProperty("forwards");
         forwards[0].GetProperty("chat_id").GetString().Should().Be("source-chat");
-        forwards[0].GetProperty("message_ids")[0].GetInt64().Should().Be(1);
+        forwards[0].GetProperty("message_id").GetInt64().Should().Be(42);
 
         var suggestButtons = document.RootElement.GetProperty("suggest_buttons");
         suggestButtons.GetProperty("layout").GetString().Should().Be("true");
