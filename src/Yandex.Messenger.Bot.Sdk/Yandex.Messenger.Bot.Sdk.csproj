@@ -6,7 +6,11 @@
 
     <PropertyGroup>
         <PackageId>Yandex.Messenger.Bot.Sdk</PackageId>
-        <PackageReleaseNotes>Full Bot API coverage: added IBot, IMessages and chat info/members methods; suggest/action buttons, forwards, replies and thread support; rich update event models.</PackageReleaseNotes>
+        <!--
+          Keep the release notes on a single line: NuGet preserves XML indentation
+          and it is shown as-is on nuget.org.
+        -->
+        <PackageReleaseNotes>Breaking changes: Update.Text, Update.File and User.Login are now nullable; message identifiers use long (ReplyMessageId, DeleteMessageRequest.MessageId); CreatePollRequest derives from SendRequest and MaxChoice is renamed to MaxChoices; CreateChatResponse and SendMessageResponse constructors changed. New: IBot (self/get, self/update); IMessages (typing, stickers, system messages, pin/unpin, reactions, sharing, file download); IChats chats/get, getChat, getMembers; polls getResults/getVoters with pagination cursor; suggest and action buttons, forwards, replies, threads, user_id and notification send options; rich update events (albums, stickers, membership changes, reactions, button requests). Fixed: default User-Agent (required by messages/getFile), multipart JSON field content types, polls query-string requests, empty-body typing response.</PackageReleaseNotes>
         <Description>Yandex Messenger bots API library.</Description>
     </PropertyGroup>
 
