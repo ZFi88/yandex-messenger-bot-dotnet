@@ -119,9 +119,11 @@ Internals of the Sdk are visible to AspNetCore, Tests, and Moq (`InternalsVisibl
 
 ```
 YandexMessengerBotClient
-  ├── Chats  : IChats   → BaseClient.Send + ISendStrategy
-  ├── Polls  : IPolls
-  └── Updates: IUpdates → GetUpdates/SetWebhook + observer subscription
+  ├── Chats   : IChats   → BaseClient.Send + ISendStrategy
+  ├── Messages: IMessages → BaseClient.Send / SendForStream + ISendStrategy
+  ├── Bot     : IBot      → self/get, self/update
+  ├── Polls   : IPolls
+  └── Updates : IUpdates  → GetUpdates/SetWebhook + observer subscription
 ```
 
 - Base API URL: `https://botapi.messenger.yandex.net/bot/v1/` (`YandexMessengerBotClient.YandexMessengerBotApiBaseAddress`).
@@ -166,7 +168,7 @@ Config section `YandexMessengerBot` (`YandexMessengerBotOptions`): `Token`, `Web
 
 ### Tests
 
-Unit-level only (no live API): MockHttp for endpoint contracts; processor/subscription behavior; JSON naming and timestamp conversion. When adding API methods: extend the corresponding `IChats`/`IPolls`/`IUpdates` impl + strategy, request/response models, and a row in `EndpointTests.Data()`. `get_diagnostics` via roslyn-mcp gives a quick compile check per project; still run `./build.sh Test` before finishing.
+Unit-level only (no live API): MockHttp for endpoint contracts; processor/subscription behavior; JSON naming and timestamp conversion. When adding API methods: extend the corresponding `IChats`/`IMessages`/`IBot`/`IPolls`/`IUpdates` impl + strategy, request/response models, and a row in `EndpointTests.Data()`. `get_diagnostics` via roslyn-mcp gives a quick compile check per project; still run `./build.sh Test` before finishing.
 
 ### Conventions specific to this repo
 
