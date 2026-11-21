@@ -6,7 +6,7 @@
 
     <PropertyGroup>
         <PackageId>Yandex.Messenger.Bot.Sdk</PackageId>
-        <PackageReleaseNotes>*</PackageReleaseNotes>
+        <PackageReleaseNotes>Full Bot API coverage: added IBot, IMessages and chat info/members methods; suggest/action buttons, forwards, replies and thread support; rich update event models.</PackageReleaseNotes>
         <Description>Yandex Messenger bots API library.</Description>
     </PropertyGroup>
 
