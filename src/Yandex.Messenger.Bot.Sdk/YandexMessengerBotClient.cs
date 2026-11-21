@@ -45,6 +45,12 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
     public IChats Chats { get; private set; } = null!;
 
     /// <inheritdoc />
+    public IMessages Messages { get; private set; } = null!;
+
+    /// <inheritdoc />
+    public IBot Bot { get; private set; } = null!;
+
+    /// <inheritdoc />
     public IPolls Polls { get; private set; } = null!;
 
     /// <inheritdoc />
@@ -62,6 +68,8 @@ public class YandexMessengerBotClient : IYandexMessengerBotClient
     private void Init()
     {
         Chats = new Chats(_httpClient);
+        Messages = new Messages(_httpClient);
+        Bot = new Bot(_httpClient);
         Polls = new Polls(_httpClient);
         Updates = new Updates(_httpClient);
     }

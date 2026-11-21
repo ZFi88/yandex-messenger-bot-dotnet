@@ -49,6 +49,8 @@ public static class ServiceCollectionsExtensions
                 return new YandexMessengerBotClient(httpClient);
             })
             .AddTransient<IChats>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Chats)
+            .AddTransient<IMessages>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Messages)
+            .AddTransient<IBot>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Bot)
             .AddTransient<IPolls>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Polls)
             .AddTransient<IUpdates>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Updates)
             .AddTransient<IUpdateProcessor, UpdateProcessor>();

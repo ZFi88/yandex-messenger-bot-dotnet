@@ -65,4 +65,25 @@ public interface IChats
     /// <param name="request">The request parameters.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     Task<GetUserLinkResponse> GetUserLink(GetUserLinkRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a list of chats and channels the bot is a member of.
+    /// </summary>
+    /// <param name="request">The request parameters.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    Task<GetChatsResponse> GetChats(GetChatsRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets detailed information about a chat or a channel.
+    /// </summary>
+    /// <param name="request">The request parameters.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    Task<GetChatResponse> GetChat(GetChatRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a list of chat or channel members.
+    /// </summary>
+    /// <param name="request">The request parameters.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    Task<GetMembersResponse> GetMembers(GetMembersRequest request, CancellationToken cancellationToken = default);
 }

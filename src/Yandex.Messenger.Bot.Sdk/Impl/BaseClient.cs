@@ -59,4 +59,34 @@ internal abstract class BaseClient
 
         return data;
     }
+
+    /// <summary>
+    /// Sends a request to Yandex Messenger Bot API and returns the raw response content stream.
+    /// </summary>
+    /// <param name="strategy">The http request creation strategy.</param>
+    /// <param name="payload">The http request payload.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>The response content stream. The caller is responsible for disposing it.</returns>
+    protected async Task<Stream> SendForStream(
+        ISendStrategy strategy,
+        object payload,
+        CancellationToken cancellationToken)
+    {
+        using var request = strategy.CreateRequest(payload);
+        var response = await _client
+            .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
+            .ConfigureAwait(false);
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            response.Dispose();
+            throw new BotException(
+                $"Yandex Messenger Bot API returned status code {(int)response.StatusCode} {response.StatusCode}. Response body: {errorBody}");
+        }
+
+        var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+        return new ResponseStream(response, stream);
+    }
 }
