@@ -11,6 +11,51 @@ This file provides guidance to AI agents when working with code in this reposito
 
 SDK target: `netstandard2.0` (C# 13). Tests and examples: `net9.0`. SDK version is pinned in `global.json` (`9.0.100`).
 
+## Tooling: roslyn-mcp first
+
+For C# navigation, analysis and refactoring use the **roslyn-mcp** MCP server first.
+Treat `grep`/`glob`/`read` on `.cs` files and `dotnet build` as fallbacks, not the default.
+
+- Pass the solution explicitly: `solutionPath` = absolute path to
+  `yandex-messenger-bot-dotnet.sln` in the repo root.
+- `sourceFile`, `projectPath`, `implementationFile` also require absolute paths.
+- The server compiles the solution in memory on the first call (~2 s cold start); later calls are fast.
+
+| Task | Tool |
+|------|------|
+| Find a type / member by name | `search_symbols` |
+| Signature, members, base type, modifiers, XML docs | `get_symbol_info` |
+| File structure without reading the whole file | `get_document_outline` |
+| All usages / rename impact | `find_references` |
+| Who calls a method | `find_callers` |
+| Implementations of an interface / abstract member | `find_implementations` |
+| Type hierarchy | `get_type_hierarchy` |
+| Compile errors / warnings without building | `get_diagnostics` (`severityFilter`, `projectPath`, `sourceFile`) |
+| Mechanical fixes | `add_braces`, `add_missing_usings` (call with `preview: true` first) |
+
+Workflow:
+
+1. Before editing, run `get_diagnostics` for the affected project / file to get a baseline.
+2. Understand impact with `get_symbol_info` / `find_references` / `find_callers` instead of grepping.
+3. After editing, re-run `get_diagnostics` (`severityFilter: "Error"`) on the touched project.
+4. Finish with `./build.sh Compile` or `./build.sh Test`. In-memory diagnostics are compiler-level only:
+   they do not replace StyleCop / Release (`TreatWarningsAsErrors`) or the test run.
+
+Actual code changes still go through `edit` / `write`; roslyn-mcp is for analysis and the two
+mechanical fixers above.
+
+### Fallback when roslyn-mcp is unavailable
+
+Fall back to the standard tools (`glob`, `grep`, `read`, `dotnet build`, `dotnet test`) when:
+
+- the `roslyn-mcp` tools are absent from the tool list;
+- a call fails with a transport / startup error, `INTERNAL_ERROR`, or a workspace load error;
+- the solution fails to load (e.g. packages not restored) and `dotnet restore` does not fix it.
+
+A cheap availability probe is `get_diagnostics` with `severityFilter: "Error"`, `maxResults: 1`.
+Retry at most once, then switch. Do not silently mix MCP and grep results: state in the answer that
+roslyn-mcp was unavailable and which fallback was used.
+
 ## Commands
 
 Build orchestration is **Nuke** (default configuration: `Release`). Prefer the wrapper scripts over invoking Nuke directly.
@@ -118,7 +163,7 @@ Config section `YandexMessengerBot` (`YandexMessengerBotOptions`): `Token`, `Web
 
 ### Tests
 
-Unit-level only (no live API): MockHttp for endpoint contracts; processor/subscription behavior; JSON naming and timestamp conversion. When adding API methods: extend the corresponding `IChats`/`IPolls`/`IUpdates` impl + strategy, request/response models, and a row in `EndpointTests.Data()`.
+Unit-level only (no live API): MockHttp for endpoint contracts; processor/subscription behavior; JSON naming and timestamp conversion. When adding API methods: extend the corresponding `IChats`/`IPolls`/`IUpdates` impl + strategy, request/response models, and a row in `EndpointTests.Data()`. `get_diagnostics` via roslyn-mcp gives a quick compile check per project; still run `./build.sh Test` before finishing.
 
 ### Conventions specific to this repo
 
