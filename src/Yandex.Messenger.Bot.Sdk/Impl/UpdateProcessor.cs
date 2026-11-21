@@ -33,6 +33,7 @@ internal class UpdateProcessor : IUpdateProcessor
         List<IObserver>? globalSnapshot = null;
         List<IObserver>? buttonSnapshot = null;
         List<IObserver>? messageSnapshot = null;
+        List<IObserver>? serverActionSnapshot = null;
 
         lock (_lock)
         {
@@ -47,15 +48,22 @@ internal class UpdateProcessor : IUpdateProcessor
                 buttonSnapshot = buttonObservers.ToList();
             }
 
-            if (!string.IsNullOrEmpty(update.Text) && _observers.TryGetValue(update.Text, out var msgObservers))
+            if (update.Text is { Length: > 0 } text && _observers.TryGetValue(text, out var msgObservers))
             {
                 messageSnapshot = msgObservers.ToList();
+            }
+
+            if (update.BotRequest?.ServerAction?.Name is { Length: > 0 } serverActionName &&
+                _observers.TryGetValue(serverActionName, out var serverActionObservers))
+            {
+                serverActionSnapshot = serverActionObservers.ToList();
             }
         }
 
         await NotifyObservers(globalSnapshot, update, cancellationToken).ConfigureAwait(false);
         await NotifyObservers(buttonSnapshot, update, cancellationToken).ConfigureAwait(false);
         await NotifyObservers(messageSnapshot, update, cancellationToken).ConfigureAwait(false);
+        await NotifyObservers(serverActionSnapshot, update, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
