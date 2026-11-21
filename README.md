@@ -12,7 +12,7 @@
 This repository represents dotnet wrapper for Yandex Messenger Bot API.
 The repository contains two libraries:
 * [Yandex.Messenger.Bot.Sdk](https://www.nuget.org/packages/Yandex.Messenger.Bot.Sdk) -
-contains number of objects and abstractions that covers all [API](https://botapi.messenger.yandex.net/docs/) methods.
+contains objects, requests and abstractions that cover the Bot API endpoints (see [API coverage](#api-coverage)).
 * [Yandex.Messenger.Bot.AspNetCore](https://www.nuget.org/packages/Yandex.Messenger.Bot.AspNetCore) - 
 contains numbers of extension methods for integrating SDK into an ASP.NET Core applications using webhooks.
 
@@ -123,3 +123,26 @@ app.UseYandexMessengerWebhook();
 ```
 
 Look for the full [examples](https://github.com/ZFi88/yandex-messenger-bot-dotnet/tree/develop/examples)!
+
+## API coverage
+
+The SDK covers every endpoint of the [Yandex Messenger Bot API](https://botapi.messenger.yandex.net/docs/):
+
+| Area | Interface | Methods |
+|------|-----------|---------|
+| Bot | `IBot` | `GetSelf`, `UpdateSelf` |
+| Chats | `IChats` | `Create`, `UpdateChat`, `GetChats`, `GetChat`, `GetMembers`, `GetUserLink` |
+| Messages | `IMessages` | `SendSticker`, `SendSystemMessage`, `SendTyping`, `Pin`, `Unpin`, `SendReaction`, `GetReactions`, `ShareFile`, `ShareImage`, `ShareGallery`, `GetFile` |
+| Polls | `IPolls` | `CreatePoll`, `GetPollResults`, `GetVoters` |
+| Updates | `IUpdates` | `GetUpdates`, `SetWebhook`, `Subscribe` |
+
+\* Text messages, files, images and albums are sent through `IChats` for backward compatibility;
+`IMessages` contains the rest of the message methods.
+
+Notes:
+
+- `IMessages.GetFile` returns a `Stream` that owns the HTTP response. Dispose it after reading the file.
+- Suggest buttons and action buttons are configured with `SuggestButtons` and `ActionButtons`
+  on `SendMessageRequest` and the other send requests (`SendFileRequest`, `SendAlbumRequest`, `SendStickerRequest`, ...).
+- Passing `WebhookUrl = null` to `SetWebhookRequest` resets the webhook.
+- Bot event flags (`get_reactions`, `get_members_changed`) are configured through `IBot.UpdateSelf`.

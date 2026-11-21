@@ -1,9 +1,9 @@
-using Nuke.Common;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.Git;
+using Fallout.Common;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Common.Tools.Git;
+using Fallout.Solutions;
 using Serilog;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {

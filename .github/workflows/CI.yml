@@ -9,7 +9,7 @@
 #
 #     - To trigger manual generation invoke:
 #
-#         nuke --generate-configuration GitHubActions_CI --host GitHubActions
+#         fallout --generate-configuration GitHubActions_CI --host GitHubActions
 #
 # </auto-generated>
 # ------------------------------------------------------------------------------
@@ -22,23 +22,40 @@ on:
       - develop
       - 'release/*'
       - master
+      - 'bugfix/*'
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   windows-latest:
     name: windows-latest
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: 'Cache: .nuke/temp, ~/.nuget/packages'
-        uses: actions/cache@v4
+      - name: 'Cache: .fallout/temp, ~/.nuget/packages'
+        uses: actions/cache@v6
         with:
           path: |
-            .nuke/temp
+            .fallout/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
+      - name: 'NuGet login (OIDC -> temp API key)'
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: 'Export NuGet API key'
+        run: echo "NUGET_API_KEY=${{ steps.nuget-login.outputs.NUGET_API_KEY }}" >> "$GITHUB_ENV"
+        shell: bash
+      - name: 'Setup: .NET SDK'
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: 'Restore: dotnet tools'
+        run: dotnet tool restore
       - name: 'Run: Publish'
-        run: ./build.cmd Publish
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet fallout Publish

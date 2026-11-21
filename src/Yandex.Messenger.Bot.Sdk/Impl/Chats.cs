@@ -90,4 +90,34 @@ internal class Chats : BaseClient, IChats
                 cancellationToken)
             .ConfigureAwait(false);
     }
+
+    /// <inheritdoc/>
+    public async Task<GetChatsResponse> GetChats(
+        GetChatsRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await Send<GetChatsResponse>(new SendJsonToQueryStringStrategy("chats/get"), request, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public async Task<GetChatResponse> GetChat(
+        GetChatRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await Send<GetChatResponse>(new SendJsonToQueryStringStrategy("chats/getChat"), request, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public async Task<GetMembersResponse> GetMembers(
+        GetMembersRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await Send<GetMembersResponse>(
+                new SendJsonToQueryStringStrategy("chats/getMembers"),
+                request,
+                cancellationToken)
+            .ConfigureAwait(false);
+    }
 }

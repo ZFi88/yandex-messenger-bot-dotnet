@@ -16,6 +16,11 @@ public abstract record Request
     public string? Login { get; init; }
 
     /// <summary>
+    /// A user ID (GUID).
+    /// </summary>
+    public string? UserId { get; init; }
+
+    /// <summary>
     /// The ID of a thread.
     /// </summary>
     public int? ThreadId { get; init; } = default;

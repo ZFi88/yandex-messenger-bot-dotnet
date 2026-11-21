@@ -18,6 +18,13 @@ public class UpdateProcessorTests
             .WithAutoProperties()
             .With(x => x.Text, "msg")
             .With(x => x.CallbackData, new ButtonData(_buttonId))
+            .Without(x => x.Images)
+            .Without(x => x.ForwardedMessages)
+            .Without(x => x.ReplyToMessage)
+            .Without(x => x.Sticker)
+            .Without(x => x.ChatMembersUpdate)
+            .Without(x => x.Reaction)
+            .Without(x => x.BotRequest)
             .Create<Update>();
     }
 
@@ -118,5 +125,65 @@ public class UpdateProcessorTests
         await updateProcessor.Process(_update, CancellationToken.None);
 
         mockMsgObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Process_WhenOneObserverThrows_RemainingObserversShouldStillBeCalled()
+    {
+        var throwingObserver = new Mock<IObserver>();
+        throwingObserver.SetupGet(x => x.Message).Returns(string.Empty);
+        throwingObserver
+            .Setup(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("Observer failure"));
+
+        var normalObserver1 = new Mock<IObserver>();
+        normalObserver1.SetupGet(x => x.Message).Returns(string.Empty);
+
+        var normalObserver2 = new Mock<IObserver>();
+        normalObserver2.SetupGet(x => x.Message).Returns(string.Empty);
+
+        IEnumerable<IObserver> observers =
+        [
+            throwingObserver.Object,
+            normalObserver1.Object,
+            normalObserver2.Object,
+        ];
+        var updateProcessor = new UpdateProcessor(observers);
+
+        await updateProcessor.Process(_update, CancellationToken.None);
+
+        throwingObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+        normalObserver1.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+        normalObserver2.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task OnNewUpdate_ServerActionObserver_ShouldCallOnce()
+    {
+        var mockObserver = new Mock<IObserver>();
+        mockObserver.SetupGet(x => x.Message).Returns("like");
+
+        IEnumerable<IObserver> observers =
+        [
+            mockObserver.Object
+        ];
+        var updateProcessor = new UpdateProcessor(observers);
+
+        var update = new Update(
+            new User("alice"),
+            new Chat("1", ChatType.Private),
+            null,
+            DateTime.UnixEpoch,
+            1,
+            2,
+            null,
+            null)
+        {
+            BotRequest = new BotRequest(new ServerAction("like", null), "button-id", null),
+        };
+
+        await updateProcessor.Process(update, CancellationToken.None);
+
+        mockObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

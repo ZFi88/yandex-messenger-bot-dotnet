@@ -1,27 +1,40 @@
-using JetBrains.Annotations;
-using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Solutions;
 
 [GitHubActions("CI",
     GitHubActionsImage.WindowsLatest,
     FetchDepth = 0,
     OnPushBranches = new[]
     {
-        "develop", "release/*", "master"
+        "develop", "release/*", "master", "bugfix/*"
     },
     InvokedTargets = new[]
     {
         nameof(Publish)
     },
-    ImportSecrets = new[]
+    ReadPermissions = new[]
     {
-        "NUGET_API_KEY"
+        GitHubActionsPermissions.Contents
+    },
+    WritePermissions = new[]
+    {
+        GitHubActionsPermissions.IdToken
     })]
-[PublicAPI]
-partial class Build : NukeBuild
+[GitHubActions("CI-Feature",
+    GitHubActionsImage.WindowsLatest,
+    FetchDepth = 0,
+    OnPushBranches = new[]
+    {
+        "feature/*"
+    },
+    InvokedTargets = new[]
+    {
+        nameof(Test)
+    })]
+partial class Build : FalloutBuild
 {
     [Solution("yandex-messenger-bot-dotnet.sln")] Solution Solution;
     [GitRepository] readonly GitRepository Repository;

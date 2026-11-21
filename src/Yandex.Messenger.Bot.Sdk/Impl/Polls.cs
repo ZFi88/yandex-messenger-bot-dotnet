@@ -27,14 +27,20 @@ internal class Polls : BaseClient, IPolls
     /// <inheritdoc/>
     public async Task<PollResultsResponse> GetPollResults(PollResultsRequest request, CancellationToken cancellationToken = default)
     {
-        return await Send<PollResultsResponse>(new SendJsonStrategy("polls/getResults", HttpMethod.Get), request, cancellationToken)
+        return await Send<PollResultsResponse>(
+                new SendJsonToQueryStringStrategy("polls/getResults"),
+                request,
+                cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
     public async Task<GetVotersResponse> GetVoters(GetVotersRequest request, CancellationToken cancellationToken = default)
     {
-        return await Send<GetVotersResponse>(new SendJsonStrategy("polls/getVoters", HttpMethod.Get), request, cancellationToken)
+        return await Send<GetVotersResponse>(
+                new SendJsonToQueryStringStrategy("polls/getVoters"),
+                request,
+                cancellationToken)
             .ConfigureAwait(false);
     }
 }

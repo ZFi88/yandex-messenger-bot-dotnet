@@ -1,6 +1,6 @@
 namespace Yandex.Messenger.Bot.Sdk.Impl.Strategies;
 
-using Exceptions;
+using System.Globalization;
 using Models.Requests;
 
 /// <summary>
@@ -8,7 +8,7 @@ using Models.Requests;
 /// </summary>
 /// <typeparam name="TRequest">The type of request options and payload.</typeparam>
 internal abstract class MultipartStrategy<TRequest> : BaseStrategy<TRequest>
-    where TRequest : Request
+    where TRequest : SendRequest
 {
     /// <summary>
     /// Relative endpoint url.
@@ -21,26 +21,51 @@ internal abstract class MultipartStrategy<TRequest> : BaseStrategy<TRequest>
     protected abstract string FilePartName { get; }
 
     /// <inheritdoc/>
-    protected override HttpRequestMessage CreateRequestInner(TRequest sendFileRequest)
+    protected override HttpRequestMessage CreateRequestInner(TRequest sendRequest)
     {
+        var targetsCount = 0;
+        targetsCount += sendRequest.ChatId is null ? 0 : 1;
+        targetsCount += sendRequest.UserId is null ? 0 : 1;
+        targetsCount += sendRequest.Login is null ? 0 : 1;
+        if (targetsCount != 1)
+        {
+            throw new ArgumentException("Exactly one of ChatId, UserId or Login must be set");
+        }
+
         var request = new HttpRequestMessage(HttpMethod.Post, Endpoint);
         request.Headers.ExpectContinue = false;
         var content = new MultipartFormDataContent();
 
-        if (sendFileRequest is { ChatId: { }, Login: { } } ||
-            (sendFileRequest.ChatId == null && sendFileRequest.Login == null))
+        MultipartContentBuilder.AddString(content, "chat_id", sendRequest.ChatId);
+        MultipartContentBuilder.AddString(content, "user_id", sendRequest.UserId);
+        MultipartContentBuilder.AddString(content, "login", sendRequest.Login);
+        MultipartContentBuilder.AddString(
+            content,
+            "thread_id",
+            sendRequest.ThreadId?.ToString(CultureInfo.InvariantCulture));
+        MultipartContentBuilder.AddString(
+            content,
+            "message_id",
+            sendRequest.MessageId?.ToString(CultureInfo.InvariantCulture));
+        MultipartContentBuilder.AddString(
+            content,
+            "reply_message_id",
+            sendRequest.ReplyMessageId?.ToString(CultureInfo.InvariantCulture));
+        MultipartContentBuilder.AddString(content, "reply_quote", sendRequest.ReplyQuote);
+
+        if (sendRequest.DisableNotification)
         {
-            throw new BotException();
+            MultipartContentBuilder.AddString(content, "disable_notification", "true");
         }
 
-        if (sendFileRequest.ChatId != null)
+        if (sendRequest.Important)
         {
-            content.Add(new StringContent(sendFileRequest.ChatId), "chat_id");
+            MultipartContentBuilder.AddString(content, "important", "true");
         }
-        else
-        {
-            content.Add(new StringContent(sendFileRequest.Login!), "login");
-        }
+
+        MultipartContentBuilder.AddJson(content, "forwards", sendRequest.Forwards);
+        MultipartContentBuilder.AddJson(content, "suggest_buttons", sendRequest.SuggestButtons);
+        MultipartContentBuilder.AddJson(content, "action_buttons", sendRequest.ActionButtons);
 
         request.Content = content;
 

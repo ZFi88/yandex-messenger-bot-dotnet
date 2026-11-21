@@ -15,7 +15,7 @@ internal class SendJsonStrategy : ISendStrategy
     /// </summary>
     /// <param name="endpoint">An endpoint relative url.</param>
     /// <param name="method">The http method.</param>
-    public SendJsonStrategy(string endpoint, HttpMethod? method = null!)
+    public SendJsonStrategy(string endpoint, HttpMethod? method = null)
     {
         _endpoint = endpoint;
         _method = method ?? HttpMethod.Post;

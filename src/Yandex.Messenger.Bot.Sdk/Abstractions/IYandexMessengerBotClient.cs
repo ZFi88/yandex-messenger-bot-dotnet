@@ -11,6 +11,16 @@ public interface IYandexMessengerBotClient : IDisposable
     public IChats Chats { get; }
 
     /// <summary>
+    /// A messages API part.
+    /// </summary>
+    public IMessages Messages { get; }
+
+    /// <summary>
+    /// A bot API part.
+    /// </summary>
+    public IBot Bot { get; }
+
+    /// <summary>
     /// A pools API part.
     /// </summary>
     public IPolls Polls { get; }

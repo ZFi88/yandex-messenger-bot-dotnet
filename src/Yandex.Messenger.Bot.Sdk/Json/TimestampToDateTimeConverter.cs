@@ -1,8 +1,5 @@
 ﻿namespace Yandex.Messenger.Bot.Sdk.Json;
 
-using System.Buffers;
-using System.Buffers.Text;
-using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -14,10 +11,13 @@ public class TimestampToDateTimeConverter : JsonConverter<DateTime>
     /// <inheritdoc />
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        // Unix timestamp is seconds past epoch
-        var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(reader.GetInt64()).ToUniversalTime();
-        return dateTime;
+        if (reader.TokenType != JsonTokenType.Number)
+        {
+            throw new JsonException(
+                $"Expected a number token for UNIX timestamp, but got {reader.TokenType}.");
+        }
+
+        return DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64()).UtcDateTime;
     }
 
     /// <inheritdoc />

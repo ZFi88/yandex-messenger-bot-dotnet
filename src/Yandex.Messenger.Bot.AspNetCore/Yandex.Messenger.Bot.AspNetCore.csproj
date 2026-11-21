@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" />
         <PackageReference Include="Microsoft.AspNetCore.Http"/>
         <PackageReference Include="Microsoft.Extensions.Configuration"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder"/>
@@ -19,7 +20,7 @@
 
     <PropertyGroup>
         <PackageId>Yandex.Messenger.Bot.AspNetCore</PackageId>
-        <PackageReleaseNotes>*</PackageReleaseNotes>
+        <PackageReleaseNotes>Breaking changes: none. New: observer registrations (global, by text, by button, typed IObserver); DI bindings for the new IBot and IMessages clients; webhook middleware hardening (batch and single payloads, serialization fallback, error logging).</PackageReleaseNotes>
         <Description>ASP.NET integration library for Yandex Messenger bots API.</Description>
     </PropertyGroup>
 
