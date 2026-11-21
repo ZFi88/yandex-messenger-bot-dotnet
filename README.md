@@ -126,7 +126,7 @@ Look for the full [examples](https://github.com/ZFi88/yandex-messenger-bot-dotne
 
 ## API coverage
 
-The SDK covers every endpoint of the [Yandex Messenger Bot API](https://botapi.messenger.yandex.net/docs/):
+The SDK covers every endpoint of the [Yandex Messenger Bot API](https://yandex.ru/dev/messenger/doc/ru/):
 
 | Area | Interface | Methods |
 |------|-----------|---------|
