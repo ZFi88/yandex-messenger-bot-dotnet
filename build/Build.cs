@@ -15,9 +15,13 @@ using Fallout.Solutions;
     {
         nameof(Publish)
     },
-    ImportSecrets = new[]
+    ReadPermissions = new[]
     {
-        "NUGET_API_KEY"
+        GitHubActionsPermissions.Contents
+    },
+    WritePermissions = new[]
+    {
+        GitHubActionsPermissions.IdToken
     })]
 [GitHubActions("CI-Feature",
     GitHubActionsImage.WindowsLatest,
