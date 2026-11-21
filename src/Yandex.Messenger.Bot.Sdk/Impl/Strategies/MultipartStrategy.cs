@@ -1,6 +1,5 @@
 namespace Yandex.Messenger.Bot.Sdk.Impl.Strategies;
 
-using Exceptions;
 using Models.Requests;
 
 /// <summary>
@@ -23,15 +22,14 @@ internal abstract class MultipartStrategy<TRequest> : BaseStrategy<TRequest>
     /// <inheritdoc/>
     protected override HttpRequestMessage CreateRequestInner(TRequest sendFileRequest)
     {
+        if ((sendFileRequest.ChatId is null) == (sendFileRequest.Login is null))
+        {
+            throw new ArgumentException("Either ChatId or Login must be set");
+        }
+
         var request = new HttpRequestMessage(HttpMethod.Post, Endpoint);
         request.Headers.ExpectContinue = false;
         var content = new MultipartFormDataContent();
-
-        if (sendFileRequest is { ChatId: { }, Login: { } } ||
-            (sendFileRequest.ChatId == null && sendFileRequest.Login == null))
-        {
-            throw new BotException();
-        }
 
         if (sendFileRequest.ChatId != null)
         {

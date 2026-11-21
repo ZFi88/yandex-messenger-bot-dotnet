@@ -36,7 +36,6 @@ public class UpdatesTests
         await botClient.Updates.GetUpdates(new GetUpdateRequest());
 
         observerMock.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
-        observerMock.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
         anotherObserverMock.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Never);
         buttonObserverMock.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -60,7 +59,6 @@ public class UpdatesTests
 
         await botClient.Updates.GetUpdates(new GetUpdateRequest());
 
-        observerMock.Verify(x => x.Invoke(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
         observerMock.Verify(x => x.Invoke(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
         anotherObserverMock.Verify(x => x.Invoke(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Never);
         buttonObserverMock.Verify(x => x.Invoke(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);

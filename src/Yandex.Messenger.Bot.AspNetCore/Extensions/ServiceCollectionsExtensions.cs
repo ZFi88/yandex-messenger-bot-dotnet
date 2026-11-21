@@ -17,24 +17,35 @@ using Sdk.Models;
 public static class ServiceCollectionsExtensions
 {
     /// <summary>
+    /// The logical name of the named HTTP client used by the Yandex Messenger Bot client.
+    /// The same name is used both when registering the client with the HTTP client factory and
+    /// when resolving it, so the configuration (base address and OAuth header) is always applied.
+    /// </summary>
+    private const string HttpClientName = "YandexMessengerBot";
+
+    /// <summary>
     /// Adds and configures the Yandex Messenger Bot SDK services into the DI container.
     /// </summary>
     /// <param name="services">The DI container.</param>
     /// <param name="cfg">The application configuration.</param>
     public static IServiceCollection AddYandexMessengerBotSdk(this IServiceCollection services, IConfiguration cfg)
     {
-        services.Configure<YandexMessengerBotOptions>(cfg.GetSection(YandexMessengerBotOptions.SectionName));
-        services.AddHttpClient<IYandexMessengerBotClient>((provider, client) =>
+        services.AddOptions<YandexMessengerBotOptions>()
+            .Bind(cfg.GetSection(YandexMessengerBotOptions.SectionName))
+            .Validate(o => !string.IsNullOrWhiteSpace(o.Token), "Token is required");
+
+        services.AddHttpClient(HttpClientName, (provider, client) =>
         {
-            var options = provider.GetService<IOptions<YandexMessengerBotOptions>>();
+            var options = provider.GetRequiredService<IOptions<YandexMessengerBotOptions>>().Value;
             client.BaseAddress = new Uri(YandexMessengerBotClient.YandexMessengerBotApiBaseAddress);
             client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("OAuth", options!.Value.Token);
+                new AuthenticationHeaderValue("OAuth", options.Token);
         });
+
         services.AddTransient<IYandexMessengerBotClient, YandexMessengerBotClient>(provider =>
             {
-                var httpClient = provider.GetService<IHttpClientFactory>()!
-                    .CreateClient(nameof(IYandexMessengerBotClient));
+                var httpClient = provider.GetRequiredService<IHttpClientFactory>()
+                    .CreateClient(HttpClientName);
                 return new YandexMessengerBotClient(httpClient);
             })
             .AddTransient<IChats>(provider => provider.GetRequiredService<IYandexMessengerBotClient>().Chats)

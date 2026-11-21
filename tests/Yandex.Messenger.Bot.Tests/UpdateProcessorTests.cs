@@ -119,4 +119,34 @@ public class UpdateProcessorTests
 
         mockMsgObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
     }
+
+    [Fact]
+    public async Task Process_WhenOneObserverThrows_RemainingObserversShouldStillBeCalled()
+    {
+        var throwingObserver = new Mock<IObserver>();
+        throwingObserver.SetupGet(x => x.Message).Returns(string.Empty);
+        throwingObserver
+            .Setup(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("Observer failure"));
+
+        var normalObserver1 = new Mock<IObserver>();
+        normalObserver1.SetupGet(x => x.Message).Returns(string.Empty);
+
+        var normalObserver2 = new Mock<IObserver>();
+        normalObserver2.SetupGet(x => x.Message).Returns(string.Empty);
+
+        IEnumerable<IObserver> observers =
+        [
+            throwingObserver.Object,
+            normalObserver1.Object,
+            normalObserver2.Object,
+        ];
+        var updateProcessor = new UpdateProcessor(observers);
+
+        await updateProcessor.Process(_update, CancellationToken.None);
+
+        throwingObserver.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+        normalObserver1.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+        normalObserver2.Verify(x => x.OnNewUpdate(It.IsAny<Update>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
 }
